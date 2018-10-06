@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Graficar</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ x }}
+    <input type="submit" value="OK">
+</form>
+
+{% if val == 1 %}
+	{% block grafica %}
+	{% endblock %}
+{% endif %}
+
+{% endblock %}
