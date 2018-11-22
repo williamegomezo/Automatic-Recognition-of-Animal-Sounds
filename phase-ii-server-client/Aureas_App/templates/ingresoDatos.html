@@ -2,16 +2,94 @@
 
 {% block content %}
 
-<h1>Graficar</h1>
-<form action="" method="post">
-    {% csrf_token %}
-    {{ x }}
-    <input type="submit" value="OK">
-</form>
+<div class="col">
+	<div class="col border border-primary rounded">
+		<h3>Search In</h3>
+		<button type="button" id="atras" class="btn btn-outline-danger" disabled>Atras</button>
+		<button type="button" id="graficar" class="btn btn-outline-success" disabled><div id="spinner" class=""></div><span id="text-button">Spectrogram</span></button>
 
-{% if val == 1 %}
-	{% block grafica %}
-	{% endblock %}
-{% endif %}
+		<select multiple id="consulta" class="form-control" name = "">
+			{% for audio in audios %}
+			     <option value="{{ audio }}">{{ audio }}</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<div class="col border border-primary rounded">
+		<h3>Channel</h3>
+		<select id="channel" class="form-control" name="">
+		</select>
+		<button type="button" id="segmentacion" class="btn btn-outline-success" disabled><div id="spinnerS" class=""></div><span id="text-buttonS">Segmentacion</span></button>
+		<button type="button" id="kmeans" class="btn btn-outline-success" disabled><div id="spinnerK" class=""></div><span id="text-buttonK">K-Means</span></button>
+	</div>
+	
+</div>
+
+<div class="col">
+	<div class="col border border-primary rounded">
+		<h3>Folder Information</h3>
+		<table class="table table-striped">
+			<tr>
+		      <th scope="col">Number of files:</th>
+		      <td scope="col" id="nFiles"></td>
+		    </tr>
+		    <tr>
+		      <th scope="col">Years:</th>
+		      <td scope="col" id="years"></td>
+		    </tr>
+		    <tr>
+		      <th scope="col">Months:</th>
+		      <td scope="col" id="months"></td>
+		    </tr>
+		    <tr>
+		      <th scope="col">Days:</th>
+		      <td scope="col" id="days"></td>
+		    </tr>
+		    <tr>
+		      <th scope="col">Hours:</th>
+		      <td scope="col" id="hours"></td>
+		    </tr>
+		</table>
+	</div>
+</div>
+
+<div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3>Spectrogram</h3>
+			</div>
+			<div class="modal-body">
+				<img id="grafica" class="img-fluid" src=""/>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="ModalCenterSegmentacion" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3>Segmentation</h3>
+			</div>
+			<div class="modal-body">
+				<img id="segmentaciongraph" class="img-fluid" src=""/>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="ModalCenterKmeans" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3>K-Means Clustering</h3>
+			</div>
+			<div class="modal-body">
+				<img id="kmeansgraph" class="img-fluid" src=""/>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}

@@ -19,5 +19,9 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    url(r'^static/img/$', views.GraphsView),
+    url(r'^segmentacion/$', views.GraphsViewSegmentacion),
+    url(r'^kmeans/$', views.GraphsViewKmeans),
+    url(r'^graficar/$', views.GraphsView),
+    url(r'^channel/$', views.ChannelAudio),
+    url(r'^consulta/$', views.AjaxConsult),
 ]
