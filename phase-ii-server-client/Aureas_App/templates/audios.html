@@ -1,0 +1,12 @@
+
+{% block audios%}
+
+<div class="col-md-2">
+	<select class="form-control selcls" id="gender1">
+		{% for audio in audios %}
+		<option> {{ audio }} </option>
+		{% endfor %}
+	</select>
+</div>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+h3{
+	margin: 10px 0px 10px;
+}
+
+#graficar {
+	float: right;
+}
+
+#kmeans {
+   float: right;
+}
+
+.btn{
+	margin: 5px 0px 5px;
+}
+
+.col{
+	margin: 5px 0px 5px;
+}
+
+.form-control{
+	margin: 5px 0px 10px;
+}
+
+.spinningCircle {
+   height: 24px;
+   width: 24px;
+   border-radius: 50%;
+   border: 4px solid rgba(255,255,255,0);
+   border-top-color: 4px solid #7fc4d1;
+   border-right-color: 4px solid #7fc4d1;
+   -webkit-animation: single2 4s infinite linear;
+   animation: single2 4s infinite linear;
+}
+
+@-webkit-keyframes single2 {
+   0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+      border-top-color: #7fc4d1;
+      border-right-color: #7fc4d1;
+   }
+   50% {
+      border-top-color: #1f4f58;
+      border-right-color: #1f4f58;
+   }
+   100% {
+      -webkit-transform: rotate(720deg);
+      transform: rotate(720deg);
+      border-top-color: #7fc4d1;
+      border-right-color: #7fc4d1;
+   }
+}
+
+@keyframes single2 {
+   0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+      border-top-color: #7fc4d1;
+      border-right-color: #7fc4d1;
+   }
+   50% {
+      border-top-color: #1f4f58;
+      border-right-color: #1f4f58;
+   }
+   100% {
+      -webkit-transform: rotate(720deg);
+      transform: rotate(720deg);
+      border-top-color: #7fc4d1;
+      border-right-color: #7fc4d1;
+   }
+}
+
+.table{
+	margin: 10px 0px 10px;
+}
+
+.modal-header{
+	padding: 1px 12px 1px;
+}
