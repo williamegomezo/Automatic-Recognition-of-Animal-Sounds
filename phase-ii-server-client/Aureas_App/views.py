@@ -20,7 +20,10 @@ path  = "Aureas_App/audios"
 
 def index(request):
 
-	audios_list = os.listdir(path)
+	audios_list = list()
+	
+	if os.path.exists(path):
+		audios_list = os.listdir(path)
 
 	return render(request, 'grafica.html', {'audios': audios_list})
 

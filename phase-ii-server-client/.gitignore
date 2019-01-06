@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 *.pyc
 
+.DS_Store
+
+audios/
+
 # C extensions
 *.so
 
