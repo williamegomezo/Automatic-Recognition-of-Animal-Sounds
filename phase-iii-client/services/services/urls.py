@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+import aureas.urls
 
 urlpatterns = [
     path('aureas/', include('aureas.urls')),
