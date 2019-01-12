@@ -1,13 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import FolderIcon from '@material-ui/icons/Folder';
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
 import { remote } from 'electron';
+import CustomList from './CustomList';
 
 export default class Home extends Component {
   selectDirectory = () => {
@@ -26,8 +26,26 @@ export default class Home extends Component {
       <div data-tid="container">
         <h2>Aureas</h2>
         <div className="row">
-          <div className="col-xs-6">Hola</div>
-          <div className="col-xs-6">Super</div>
+          <div className="col-xs-offset-1 col-xs-10">
+            <span>Species</span>
+            <CustomList />
+          </div>
+          <div className="col-xs-offset-2 col-xs-10">
+            <span>Folder</span>
+            <CustomList />
+            <Paper>
+              <List>
+                <ListItem>
+                  <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+                </ListItem>
+                <Divider component="li" />
+                <ListItem>
+                  <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+                </ListItem>
+                <Divider component="li" />
+              </List>
+            </Paper>
+          </div>
         </div>
         <Button
           variant="contained"
@@ -36,31 +54,6 @@ export default class Home extends Component {
         >
           Hello World
         </Button>
-
-        <Grid item xs={12} md={6}>
-          <div>
-            <List className="fileList">
-              <ListItem>
-                <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon>
-                <ListItemText primary="Single-line item" />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon>
-                <ListItemText primary="Single-line item" />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon>
-                <ListItemText primary="Single-line item" />
-              </ListItem>
-            </List>
-          </div>
-        </Grid>
       </div>
     );
   }
