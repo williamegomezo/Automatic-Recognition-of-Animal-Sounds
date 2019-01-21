@@ -1,0 +1,12 @@
+[
+  {
+    "name": "PlayArrow",
+    "tooltip": "Play",
+    "callback": "playItem"
+  },
+  {
+    "name": "Gradient",
+    "tooltip": "Spectrogram",
+    "callback": "getSpectrogram"
+  }
+]

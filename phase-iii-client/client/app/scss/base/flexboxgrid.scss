@@ -2,29 +2,28 @@
 // -- Start editing -- //
 //
 
-@import "flex.scss";
+@import 'flex.scss';
 
 // Set the number of columns you want to use on your layout.
 $grid-columns: 24 !default;
 // Set the gutter between columns.
-$gutter-width: 1rem !default;
+$gutter-width: 0 !default;
 // Set a margin for the container sides.
-$outer-margin: 2rem !default;
+$outer-margin: 0 !default;
+
+$adjust-height: 1;
 // Create or remove breakpoints for your project
 // Syntax:
 // name SIZErem,
-$breakpoints:
-  sm 48em 46rem,
-  md 62em 61rem,
-  lg 75em 71rem !default;
+$breakpoints: sm 48em 46rem, md 62em 61rem, lg 75em 71rem !default;
 $flexboxgrid-max-width: 1200px !default;
 
 //
 // -- Stop editing -- //
 //
 
-$gutter-compensation: $gutter-width * .5 * -1;
-$half-gutter-width: $gutter-width * .5;
+$gutter-compensation: $gutter-width * 0.5 * -1;
+$half-gutter-width: $gutter-width * 0.5;
 
 .wrapper {
   box-sizing: border-box;
@@ -44,6 +43,17 @@ $half-gutter-width: $gutter-width * .5;
   @include flexbox();
   @include flex(0, 1, auto);
   @include flex-direction(row);
+  @include flex-wrap(wrap);
+
+  margin-right: $gutter-compensation;
+  margin-left: $gutter-compensation;
+}
+
+.column {
+  box-sizing: border-box;
+  @include flexbox();
+  @include flex(0, 1, auto);
+  @include flex-direction(column);
   @include flex-wrap(wrap);
 
   margin-right: $gutter-compensation;
@@ -78,6 +88,12 @@ $name: xs;
   @include flexboxgrid-sass-col-common;
   @include flex-basis(auto);
 }
+
+.row-#{$name} {
+  @include flexboxgrid-sass-col-common;
+  @include flex-basis(auto);
+}
+
 @for $i from 1 through $grid-columns {
   .col-#{$name}-#{$i} {
     @include flexboxgrid-sass-col-common;
@@ -86,19 +102,46 @@ $name: xs;
     max-width: 100% / $grid-columns * $i;
   }
 }
+
 @for $i from 1 through $grid-columns {
-  .col-#{$name}-offset-#{$i} {
+  .row-#{$name}-#{$i} {
+    @include flexboxgrid-sass-col-common;
+    @include flex-basis(100% / $grid-columns * $i);
+
+    max-height: 100% / $grid-columns * $i;
+  }
+}
+
+@for $i from 1 through $grid-columns {
+  .col-#{$name}-off-#{$i} {
     @include flexboxgrid-sass-col-common;
 
     margin-left: 100% / $grid-columns * $i;
   }
 }
+
+@for $i from 1 through $grid-columns {
+  .row-#{$name}-off-#{$i} {
+    @include flexboxgrid-sass-col-common;
+
+    margin-top: 100% / $grid-columns * $i * $adjust-height;
+  }
+}
+
 .col-#{$name} {
   @include flex-grow(1);
   @include flex-basis(0);
 
   max-width: 100%;
 }
+
+.row-#{$name} {
+  @include flex-grow(1);
+  @include flex-basis(0);
+
+  max-height: 100%;
+}
+
 .start-#{$name} {
   @include justify-content(flex-start);
 
@@ -145,7 +188,6 @@ $name: xs;
   order: 1;
 }
 
-
 @each $breakpoint in $breakpoints {
   $name: nth($breakpoint, 1);
   $size: nth($breakpoint, 2);
@@ -168,10 +210,10 @@ $name: xs;
       }
     }
     @for $i from 1 through $grid-columns {
-      .col-#{$name}-offset-#{$i} {
+      .col-#{$name}-off-#{$i} {
         @include flexboxgrid-sass-col-common;
 
-        margin-left: 100% / $grid-columns * $i
+        margin-left: 100% / $grid-columns * $i;
       }
     }
     .col-#{$name} {

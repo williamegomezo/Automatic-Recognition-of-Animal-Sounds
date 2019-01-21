@@ -2,16 +2,25 @@
 import React, { Component } from 'react';
 import List from '@material-ui/core/List';
 import Fab from '@material-ui/core/Fab';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import CustomListItem from './CustomListItem';
+import fileButtons from '../mocks/FileButtons.json';
 
-export default class CustomList extends Component {
+type Props = {
+  dir: string,
+  addText: string,
+  items: array
+};
+
+export default class CustomList extends Component<Props> {
+  props: Props;
+
   render() {
+    const { dir, items, addText } = this.props;
     return (
       <div style={styles.container}>
         <div
@@ -27,21 +36,25 @@ export default class CustomList extends Component {
             </IconButton>
           </div>
         </div>
-        <Paper>
-          <List style={styles.list}>
-            <CustomListItem primary="Audio 1" />
-            <CustomListItem primary="Audio 2" />
-            <CustomListItem primary="Audio 1" />
-            <CustomListItem primary="Audio 2" />
-            <CustomListItem primary="Audio 1" />
-            <CustomListItem primary="Audio 2" />
-          </List>
-        </Paper>
-        <Tooltip title="Add audio">
-          <Fab style={styles.listFloatButton}>
-            <AddIcon />
-          </Fab>
-        </Tooltip>
+        <List style={styles.list}>
+          {items.length === 0 && <CustomListItem primary="List Empty" />}
+          {items.map(item => (
+            <CustomListItem
+              key={item}
+              dir={dir}
+              primary={item}
+              checkbox
+              buttons={fileButtons}
+            />
+          ))}
+        </List>
+        {addText && (
+          <Tooltip title={addText}>
+            <Fab style={styles.listFloatButton}>
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+        )}
       </div>
     );
   }
@@ -59,7 +72,7 @@ const styles = {
   },
   list: {
     padding: '15px 10px 30px',
-    maxHeight: '200px',
+    height: '200px',
     overflow: 'auto'
   },
   listFloatButton: {
