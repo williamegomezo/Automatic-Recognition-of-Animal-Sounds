@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "eslint-config-react-app": "^3.0.6"
+  }
+}
