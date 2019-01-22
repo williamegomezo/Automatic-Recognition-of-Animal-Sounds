@@ -10,8 +10,17 @@ import { remote } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import CustomList from './CustomList';
+import Species from '../mocks/Species.json';
+import fileButtons from '../constants/FileButtons.json';
+import speciesButtons from '../constants/SpeciesButtons.json';
 
-export default class Home extends Component {
+type Props = {
+  history: {}
+};
+
+export default class Home extends Component<Props> {
+  props: Props;
+
   constructor(props) {
     super(props);
 
@@ -20,6 +29,12 @@ export default class Home extends Component {
       files: [],
       species: []
     };
+
+    this.getSpecies = this.getSpecies.bind(this);
+  }
+
+  componentDidMount() {
+    this.getSpecies();
   }
 
   selectDirectory = () => {
@@ -38,6 +53,10 @@ export default class Home extends Component {
       }
     );
   };
+
+  getSpecies() {
+    this.setState({ species: Species });
+  }
 
   render() {
     const { dir, files, species } = this.state;
@@ -60,14 +79,22 @@ export default class Home extends Component {
                 </ListItem>
               </List>
               <Divider />
-              <CustomList dir={dir} items={files} />
+              <CustomList dir={dir} buttons={fileButtons} items={files} />
             </Paper>
           </div>
           <div className="col-xs-off-1 col-xs-11 row-xs-24 column">
             <div className="row-xs-20">
               <Paper elevation={1}>
                 <h2>Species</h2>
-                <CustomList items={species} addText="Add species" />
+                <CustomList
+                  checkbox
+                  buttons={speciesButtons}
+                  items={species}
+                  addButton={{
+                    text: 'Add species',
+                    link: '/table'
+                  }}
+                />
               </Paper>
             </div>
             <div className="row-xs-2" />

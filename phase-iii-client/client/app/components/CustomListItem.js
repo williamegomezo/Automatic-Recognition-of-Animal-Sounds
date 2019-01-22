@@ -1,14 +1,12 @@
 // @flow
 import React, { Component } from 'react';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import CustomButton from './CustomButton';
 import CustomDialog from './CustomDialog';
 
 type Props = {
   primary: string,
-  secondary: string,
   checkbox: boolean,
   buttons: array,
   dir: string
@@ -20,12 +18,21 @@ export default class CustomListItem extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      spectrogramDialog: false
+      dialogOpened: false,
+      checked: false
     };
 
     this.playItem = this.playItem.bind(this);
+    this.toggleCheck = this.toggleCheck.bind(this);
     this.getSpectrogram = this.getSpectrogram.bind(this);
-    this.closeSpectrogram = this.closeSpectrogram.bind(this);
+    this.getRepresentiveCall = this.getRepresentiveCall.bind(this);
+    this.openDialog = this.openDialog.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
+  }
+
+  toggleCheck() {
+    const { checked } = this.state;
+    this.setState({ checked: !checked });
   }
 
   playItem() {
@@ -35,16 +42,24 @@ export default class CustomListItem extends Component<Props> {
   }
 
   getSpectrogram() {
-    this.setState({ spectrogramDialog: true });
+    this.openDialog();
   }
 
-  closeSpectrogram() {
-    this.setState({ spectrogramDialog: false });
+  getRepresentiveCall() {
+    this.openDialog();
+  }
+
+  openDialog() {
+    this.setState({ dialogOpened: true });
+  }
+
+  closeDialog() {
+    this.setState({ dialogOpened: false });
   }
 
   render() {
-    const { primary, secondary, checkbox, buttons } = this.props;
-    const { spectrogramDialog } = this.state;
+    const { primary, checkbox, buttons } = this.props;
+    const { dialogOpened, checked } = this.state;
     return (
       <ListItem dense button>
         <div className="row middle-xs col-xs-24">
@@ -56,14 +71,24 @@ export default class CustomListItem extends Component<Props> {
                 onClick={this[button.callback]}
               />
             ))}
-          {checkbox && <Checkbox tabIndex={-1} disableRipple />}
-          <ListItemText primary={primary} secondary={secondary} />
+          {checkbox && (
+            <Checkbox checked={checked} tabIndex={-1} disableRipple />
+          )}
+          <span style={styles.text}>{primary}</span>
         </div>
-        <CustomDialog
-          open={spectrogramDialog}
-          handleClose={this.closeSpectrogram}
-        />
+        <CustomDialog open={dialogOpened} handleClose={this.closeDialog} />
       </ListItem>
     );
   }
 }
+
+const styles = {
+  text: {
+    flexBasis: 'calc(13 / 24 * 100%)',
+    maxWidth: 'calc(13 / 24 * 100%)',
+    fontFamily: 'Roboto',
+    fontSize: '12px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  }
+};

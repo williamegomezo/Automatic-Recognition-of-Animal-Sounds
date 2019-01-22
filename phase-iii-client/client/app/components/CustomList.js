@@ -7,20 +7,53 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
+import { Link } from 'react-router-dom';
 import CustomListItem from './CustomListItem';
-import fileButtons from '../mocks/FileButtons.json';
+import routes from '../constants/routes';
 
 type Props = {
   dir: string,
-  addText: string,
+  addButton: object,
+  checkbox: boolean,
+  buttons: array,
   items: array
 };
 
 export default class CustomList extends Component<Props> {
   props: Props;
 
+  constructor(props) {
+    const { items } = props;
+    super(props);
+    this.state = {
+      searchValue: '',
+      filteredItems: items
+    };
+    this.searchItems = this.searchItems.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { items } = this.props;
+    if (nextProps.items !== items) {
+      this.setState({ filteredItems: nextProps.items });
+    }
+  }
+
+  searchItems(event) {
+    this.setState({ searchValue: event.target.value }, () => {
+      const { items } = this.props;
+      const { searchValue } = this.state;
+      this.setState({
+        filteredItems: items
+          ? items.filter(item => item.includes(searchValue))
+          : []
+      });
+    });
+  }
+
   render() {
-    const { dir, items, addText } = this.props;
+    const { dir, addButton, buttons, checkbox } = this.props;
+    const { filteredItems, searchValue } = this.state;
     return (
       <div style={styles.container}>
         <div
@@ -28,7 +61,12 @@ export default class CustomList extends Component<Props> {
           className="row col-xs-24 middle-xs center-xs"
         >
           <div className="col-offset-1 col-xs-17">
-            <TextField label="Search" style={styles.searchInput} />
+            <TextField
+              label="Search"
+              style={styles.searchInput}
+              value={searchValue}
+              onChange={this.searchItems}
+            />
           </div>
           <div className="col-xs-4">
             <IconButton aria-label="Search">
@@ -37,22 +75,25 @@ export default class CustomList extends Component<Props> {
           </div>
         </div>
         <List style={styles.list}>
-          {items.length === 0 && <CustomListItem primary="List Empty" />}
-          {items.map(item => (
+          {filteredItems.length === 0 && (
+            <CustomListItem primary="No results. List empty." />
+          )}
+          {filteredItems.map(item => (
             <CustomListItem
-              key={item}
               dir={dir}
               primary={item}
-              checkbox
-              buttons={fileButtons}
+              checkbox={checkbox}
+              buttons={buttons}
             />
           ))}
         </List>
-        {addText && (
-          <Tooltip title={addText}>
-            <Fab style={styles.listFloatButton}>
-              <AddIcon />
-            </Fab>
+        {addButton && (
+          <Tooltip title={addButton.text}>
+            <Link to={routes.TABLE}>
+              <Fab style={styles.listFloatButton}>
+                <AddIcon />
+              </Fab>
+            </Link>
           </Tooltip>
         )}
       </div>
