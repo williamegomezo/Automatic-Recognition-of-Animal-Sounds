@@ -1,11 +1,10 @@
 // @flow
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import routes from '../constants/routes';
+import ResultsTable from '../components/ResultsTable';
 
 export default class TableView extends Component {
   state = {
@@ -41,7 +40,9 @@ export default class TableView extends Component {
             index={this.state.value}
             onChangeIndex={this.handleChangeIndex}
           >
-            <div>Item One</div>
+            <div>
+              <ResultsTable />
+            </div>
             <div>Item Two</div>
             <div>Item Three</div>
           </SwipeableViews>
