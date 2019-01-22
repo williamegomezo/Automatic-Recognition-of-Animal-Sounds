@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import HomePage from './containers/HomePage';
-import TablePage from './containers/TablePage';
+import HomePage from './containers/Home';
+import TablePage from './containers/TableView';
 import routes from './constants/routes';
 
 class App extends Component {

@@ -5,16 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CustomButton from './CustomButton';
 import CustomDialog from './CustomDialog';
 
-type Props = {
-  primary: string,
-  checkbox: boolean,
-  buttons: array,
-  dir: string
-};
-
-export default class CustomListItem extends Component<Props> {
-  props: Props;
-
+export default class CustomListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,17 +55,20 @@ export default class CustomListItem extends Component<Props> {
       <ListItem dense button>
         <div className="row middle-xs col-xs-24">
           {buttons &&
-            buttons.map(button => (
+            buttons.map((button, key) => (
               <CustomButton
+                key={key}
                 name={button.name}
                 tooltip={button.tooltip}
                 onClick={this[button.callback]}
               />
             ))}
-          {checkbox && (
-            <Checkbox checked={checked} tabIndex={-1} disableRipple />
-          )}
-          <span style={styles.text}>{primary}</span>
+          <div onClick={this.toggleCheck}>
+            {checkbox && (
+              <Checkbox checked={checked} tabIndex={-1} disableRipple />
+            )}
+            <span style={styles.text}>{primary}</span>
+          </div>
         </div>
         <CustomDialog open={dialogOpened} handleClose={this.closeDialog} />
       </ListItem>

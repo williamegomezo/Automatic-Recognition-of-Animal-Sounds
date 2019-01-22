@@ -6,15 +6,7 @@ import GraphicEq from '@material-ui/icons/GraphicEq';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-type Props = {
-  tooltip: string,
-  name: string,
-  onClick: any
-};
-
-export default class CustomButton extends Component<Props> {
-  props: Props;
-
+export default class CustomButton extends Component {
   render() {
     const { name, tooltip, onClick } = this.props;
     return (

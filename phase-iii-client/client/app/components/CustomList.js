@@ -11,17 +11,7 @@ import { Link } from 'react-router-dom';
 import CustomListItem from './CustomListItem';
 import routes from '../constants/routes';
 
-type Props = {
-  dir: string,
-  addButton: object,
-  checkbox: boolean,
-  buttons: array,
-  items: array
-};
-
-export default class CustomList extends Component<Props> {
-  props: Props;
-
+export default class CustomList extends Component {
   constructor(props) {
     const { items } = props;
     super(props);
@@ -78,8 +68,9 @@ export default class CustomList extends Component<Props> {
           {filteredItems.length === 0 && (
             <CustomListItem primary="No results. List empty." />
           )}
-          {filteredItems.map(item => (
+          {filteredItems.map((item, key) => (
             <CustomListItem
+              key={key}
               dir={dir}
               primary={item}
               checkbox={checkbox}
