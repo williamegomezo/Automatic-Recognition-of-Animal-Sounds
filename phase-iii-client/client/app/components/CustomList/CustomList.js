@@ -9,9 +9,9 @@ import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import { Link } from 'react-router-dom';
 import CustomListItem from './CustomListItem';
-import routes from '../constants/routes';
+import routes from '../../constants/routes';
 
-export default class CustomList extends Component {
+class CustomList extends Component {
   constructor(props) {
     const { items } = props;
     super(props);
@@ -113,3 +113,5 @@ const styles = {
     right: '15px'
   }
 };
+
+export default CustomList;

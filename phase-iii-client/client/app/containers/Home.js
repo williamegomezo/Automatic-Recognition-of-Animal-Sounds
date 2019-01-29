@@ -9,12 +9,12 @@ import Paper from '@material-ui/core/Paper';
 import { remote } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import CustomList from '../components/CustomList';
+import CustomList from '../components/CustomList/CustomList';
 import Species from '../mocks/Species.json';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
 
-export default class Home extends Component<Props> {
+export default class Home extends Component {
   constructor(props) {
     super(props);
 

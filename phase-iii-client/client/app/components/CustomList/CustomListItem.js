@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import Checkbox from '@material-ui/core/Checkbox';
-import CustomButton from './CustomButton';
-import CustomDialog from './CustomDialog';
+import CustomButton from '../CustomButton/CustomButton';
+import CustomDialog from '../CustomDialog/CustomDialog';
 
 export default class CustomListItem extends Component {
   constructor(props) {

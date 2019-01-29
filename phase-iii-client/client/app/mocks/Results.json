@@ -49,6 +49,102 @@
       "Max. Freq.": 320,
       "Min. Freq.": 500,
       "Cluster": 1
+    },
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 48.1,
+      "End": 49.2,
+      "Max. Freq.": 1020,
+      "Min. Freq.": 2300,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001040.wav",
+      "Start": 7.1,
+      "End": 10.2,
+      "Max. Freq.": 320,
+      "Min. Freq.": 500,
+      "Cluster": 1
+    },
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 48.1,
+      "End": 49.2,
+      "Max. Freq.": 1020,
+      "Min. Freq.": 2300,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001040.wav",
+      "Start": 7.1,
+      "End": 10.2,
+      "Max. Freq.": 320,
+      "Min. Freq.": 500,
+      "Cluster": 1
+    },
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 48.1,
+      "End": 49.2,
+      "Max. Freq.": 1020,
+      "Min. Freq.": 2300,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001040.wav",
+      "Start": 7.1,
+      "End": 10.2,
+      "Max. Freq.": 320,
+      "Min. Freq.": 500,
+      "Cluster": 1
+    },
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 48.1,
+      "End": 49.2,
+      "Max. Freq.": 1020,
+      "Min. Freq.": 2300,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001040.wav",
+      "Start": 7.1,
+      "End": 10.2,
+      "Max. Freq.": 320,
+      "Min. Freq.": 500,
+      "Cluster": 1
+    },
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 48.1,
+      "End": 49.2,
+      "Max. Freq.": 1020,
+      "Min. Freq.": 2300,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001040.wav",
+      "Start": 7.1,
+      "End": 10.2,
+      "Max. Freq.": 320,
+      "Min. Freq.": 500,
+      "Cluster": 1
+    },
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 48.1,
+      "End": 49.2,
+      "Max. Freq.": 1020,
+      "Min. Freq.": 2300,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001040.wav",
+      "Start": 7.1,
+      "End": 10.2,
+      "Max. Freq.": 320,
+      "Min. Freq.": 500,
+      "Cluster": 1
     }
   ]
 }

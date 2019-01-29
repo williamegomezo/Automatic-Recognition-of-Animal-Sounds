@@ -3,11 +3,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
-import CustomHeader from './ResultsTable/CustomHeader';
-import CustomBody from './ResultsTable/CustomBody';
-import CustomToolbar from './ResultsTable/CustomToolbar';
-import { createData } from './ResultsTable/utils';
-import mockResults from '../mocks/Results.json';
+import CustomHeader from './CustomHeader';
+import CustomBody from './CustomBody';
+import CustomToolbar from './CustomToolbar';
+import { createData } from './utils';
+import mockResults from '../../mocks/Results.json';
 
 const styles = theme => ({
   root: {
@@ -103,14 +103,16 @@ class CustomTable extends React.Component {
       page
     } = this.state;
 
+    const { classes } = this.props;
+
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
-      <Paper>
+      <Paper className={classes.root}>
         <CustomToolbar numSelected={selected.length} />
-        <div>
-          <Table aria-labelledby="tableTitle">
+        <div className={classes.tableWrapper}>
+          <Table className={classes.table} aria-labelledby="tableTitle">
             <CustomHeader
               headers={headers}
               numSelected={selected.length}
@@ -138,7 +140,7 @@ class CustomTable extends React.Component {
           </Table>
         </div>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10]}
           component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}

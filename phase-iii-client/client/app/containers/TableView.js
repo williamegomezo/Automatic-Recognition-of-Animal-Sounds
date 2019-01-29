@@ -4,7 +4,8 @@ import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CustomTable from '../components/CustomTable';
+import CustomTable from '../components/CustomTable/CustomTable';
+import CallDisplay from '../components/CallDisplay/CallDisplay';
 
 export default class TableView extends Component {
   state = {
@@ -40,8 +41,13 @@ export default class TableView extends Component {
             index={this.state.value}
             onChangeIndex={this.handleChangeIndex}
           >
-            <div>
-              <CustomTable />
+            <div className="row col-xs-24">
+              <div className="col-xs-16">
+                <CustomTable />
+              </div>
+              <div className="col-xs-8">
+                <CallDisplay />
+              </div>
             </div>
             <div>Item Two</div>
             <div>Item Three</div>
