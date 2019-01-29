@@ -8,6 +8,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Folder structure
 
+#### src folder:
+
+- Components:
+  All components of the project
+
 ### Boilerplates:
 
 - This project uses Electron-React-Boilerplate (https://github.com/electron-react-boilerplate/electron-react-boilerplate) with some modifications:
@@ -15,11 +20,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 #### Typescript removed.
 
 #### Store was removed so far due to it is not needed.
-
-#### src folder:
-
-- Components:
-  All components of the project
 
 ### Linters: Eslint and Prettier
 
