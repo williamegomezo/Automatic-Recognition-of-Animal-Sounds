@@ -1,0 +1,54 @@
+{
+  "headers": [
+    {
+      "label": "Filename",
+      "type": false
+    },
+    {
+      "label": "Start",
+      "type": true
+    },
+    {
+      "label": "End",
+      "type": true
+    },
+    {
+      "label": "Max. Freq.",
+      "type": true
+    },
+    {
+      "label": "Min. Freq.",
+      "type": true
+    },
+    {
+      "label": "Cluster",
+      "type": false
+    }
+  ],
+  "results": [
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 8.1,
+      "End": 9.2,
+      "Max. Freq.": 1000,
+      "Min. Freq.": 3000,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001050.wav",
+      "Start": 48.1,
+      "End": 49.2,
+      "Max. Freq.": 1020,
+      "Min. Freq.": 2300,
+      "Cluster": 2
+    },
+    {
+      "Filename": "JAGUAS_20180901_001040.wav",
+      "Start": 7.1,
+      "End": 10.2,
+      "Max. Freq.": 320,
+      "Min. Freq.": 500,
+      "Cluster": 1
+    }
+  ]
+}

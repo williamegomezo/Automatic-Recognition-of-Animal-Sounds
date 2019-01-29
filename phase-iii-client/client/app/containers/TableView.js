@@ -4,7 +4,7 @@ import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import ResultsTable from '../components/ResultsTable';
+import CustomTable from '../components/CustomTable';
 
 export default class TableView extends Component {
   state = {
@@ -41,7 +41,7 @@ export default class TableView extends Component {
             onChangeIndex={this.handleChangeIndex}
           >
             <div>
-              <ResultsTable />
+              <CustomTable />
             </div>
             <div>Item Two</div>
             <div>Item Three</div>
