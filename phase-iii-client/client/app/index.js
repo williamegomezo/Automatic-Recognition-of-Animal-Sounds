@@ -14,3 +14,17 @@ render(
   </AppContainer>,
   document.getElementById('root')
 );
+
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    // eslint-disable-next-line global-require
+    render(
+      <AppContainer>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AppContainer>,
+      document.getElementById('root')
+    );
+  });
+}
