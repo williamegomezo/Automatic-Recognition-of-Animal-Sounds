@@ -10,10 +10,12 @@ export default class CustomListItem extends Component {
     super(props);
     this.state = {
       dialogOpened: false,
-      checked: false
+      checked: false,
+      audio: null
     };
 
     this.playItem = this.playItem.bind(this);
+    this.stopItem = this.stopItem.bind(this);
     this.toggleCheck = this.toggleCheck.bind(this);
     this.getSpectrogram = this.getSpectrogram.bind(this);
     this.getRepresentiveCall = this.getRepresentiveCall.bind(this);
@@ -28,8 +30,13 @@ export default class CustomListItem extends Component {
 
   playItem() {
     const { primary, dir } = this.props;
-    const audio = new Audio(`${dir}/${primary}`);
-    audio.play();
+    this.setState({ audio: new Audio(`${dir}/${primary}`) }, () => {
+      this.state.audio.play();
+    });
+  }
+
+  stopItem() {
+    this.state.audio.pause();
   }
 
   getSpectrogram() {
@@ -59,8 +66,8 @@ export default class CustomListItem extends Component {
               <CustomButton
                 key={key}
                 name={button.name}
-                tooltip={button.tooltip}
-                onClick={this[button.callback]}
+                tooltips={button.tooltips}
+                onClick={button.callbacks.map(c => this[c])}
               />
             ))}
           <div onClick={this.toggleCheck}>

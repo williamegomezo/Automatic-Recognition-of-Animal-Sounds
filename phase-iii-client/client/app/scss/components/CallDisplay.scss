@@ -1,0 +1,15 @@
+.callDisplay {
+  &__container {
+    margin-top: 24px;
+  }
+
+  &__img {
+    margin-top: 24px;
+  }
+
+  &__buttons {
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+  }
+}

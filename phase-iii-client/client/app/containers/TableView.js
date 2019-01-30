@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CustomTable from '../components/CustomTable/CustomTable';
 import CallDisplay from '../components/CallDisplay/CallDisplay';
+import callButtons from '../constants/CallDisplayButtons.json';
 
 export default class TableView extends Component {
   state = {
@@ -46,7 +47,7 @@ export default class TableView extends Component {
                 <CustomTable />
               </div>
               <div className="col-xs-8">
-                <CallDisplay />
+                <CallDisplay buttons={callButtons} />
               </div>
             </div>
             <div>Item Two</div>

@@ -38,14 +38,10 @@ let CustomToolbar = props => {
   const { numSelected, classes } = props;
 
   return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0
-      })}
-    >
+    <Toolbar className={classes.root}>
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="subtitle1">
+          <Typography variant="h6" id="tableTitle">
             {numSelected} selected
           </Typography>
         ) : (

@@ -1,15 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import { remote } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import CustomList from '../components/CustomList/CustomList';
+import CustomPanel from '../components/CustomPanel/CustomPanel';
 import Species from '../mocks/Species.json';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
@@ -64,14 +62,7 @@ export default class Home extends Component {
               <Button variant="contained" onClick={this.selectDirectory}>
                 Select directory
               </Button>
-              <List className="FileList">
-                <ListItem>
-                  <ListItemText primary="Photos" secondary="Jan 9, 2014" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Photos" secondary="Jan 9, 2014" />
-                </ListItem>
-              </List>
+              <CustomPanel />
               <Divider />
               <CustomList dir={dir} buttons={fileButtons} items={files} />
             </Paper>

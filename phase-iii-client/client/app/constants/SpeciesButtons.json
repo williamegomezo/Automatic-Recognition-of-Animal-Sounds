@@ -1,7 +1,7 @@
 [
   {
-    "name": "GraphicEq",
-    "tooltip": "Representative Call",
-    "callback": "getRepresentiveCall"
+    "name": "RepresentativeCall",
+    "tooltips": ["Representative Call"],
+    "callbacks": ["getRepresentiveCall"]
   }
 ]
