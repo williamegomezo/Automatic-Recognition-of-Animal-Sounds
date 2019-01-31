@@ -6,7 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CustomTable from '../components/CustomTable/CustomTable';
 import CallDisplay from '../components/CallDisplay/CallDisplay';
+import Plots from '../components/Plots/Plots';
 import callButtons from '../constants/CallDisplayButtons.json';
+import mockResults from '../mocks/Results.json';
+import clusterResults from '../mocks/Clusters.json';
 
 export default class TableView extends Component {
   state = {
@@ -33,9 +36,10 @@ export default class TableView extends Component {
               textColor="primary"
               variant="fullWidth"
             >
-              <Tab label="Item One" />
-              <Tab label="Item Two" />
-              <Tab label="Item Three" />
+              <Tab label="Cluster results" />
+              <Tab label="Representative Calls" />
+              <Tab label="Plots" />
+              <Tab label="Activity Patterns" />
             </Tabs>
           </AppBar>
           <SwipeableViews
@@ -44,14 +48,40 @@ export default class TableView extends Component {
           >
             <div className="row col-xs-24">
               <div className="col-xs-16">
-                <CustomTable />
+                <CustomTable
+                  moduleType="results_table"
+                  headers={mockResults.headers}
+                  data={mockResults.data}
+                  checkbox
+                />
               </div>
               <div className="col-xs-8">
-                <CallDisplay buttons={callButtons} />
+                <CallDisplay
+                  moduleType="results_table"
+                  headers={mockResults.headers}
+                  buttons={callButtons}
+                />
               </div>
             </div>
-            <div>Item Two</div>
-            <div>Item Three</div>
+            <div className="row col-xs-24">
+              <div className="col-xs-16">
+                <CustomTable
+                  moduleType="cluster_table"
+                  headers={clusterResults.headers}
+                  data={clusterResults.data}
+                />
+              </div>
+              <div className="col-xs-8">
+                <CallDisplay
+                  moduleType="cluster_table"
+                  headers={clusterResults.headers}
+                  buttons={callButtons}
+                />
+              </div>
+            </div>
+            <div className="row col-xs-24">
+              <Plots headers={mockResults.headers} data={mockResults.data} />
+            </div>
           </SwipeableViews>
         </div>
       </div>

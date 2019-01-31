@@ -1,12 +1,14 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import CustomButton from '../CustomButton/CustomButton';
 import CustomPanel from '../CustomPanel/CustomPanel';
 
 class CallDisplay extends Component {
   render() {
-    const { buttons } = this.props;
+    const { moduleType, headers, buttons, selectedItem } = this.props;
+    console.log(selectedItem[moduleType]);
     return (
       <Paper className="col-xs-off-1 col-xs-22 callDisplay__container">
         <img
@@ -25,10 +27,21 @@ class CallDisplay extends Component {
               />
             ))}
         </div>
-        <CustomPanel />
+        <CustomPanel
+          info={headers.map(h => ({
+            label: h['label'],
+            value: selectedItem[moduleType]
+              ? selectedItem[moduleType][h['label']]
+              : ''
+          }))}
+        />
       </Paper>
     );
   }
 }
 
-export default CallDisplay;
+const mapStateToProps = state => {
+  return { selectedItem: state.selected };
+};
+
+export default connect(mapStateToProps)(CallDisplay);

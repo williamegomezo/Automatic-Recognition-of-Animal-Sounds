@@ -1,0 +1,62 @@
+{
+  "headers": [
+    {
+      "label": "Cluster",
+      "type": true
+    },
+    {
+      "label": "Count",
+      "type": true
+    },
+    {
+      "label": "Min. Freq.",
+      "type": true
+    },
+    {
+      "label": "Max. Freq.",
+      "type": true
+    },
+    {
+      "label": "Dom. Freq.",
+      "type": true
+    },
+    {
+      "label": "Avg. Call duration.",
+      "type": true
+    }
+  ],
+  "data": [
+    {
+      "Cluster": "1",
+      "Count": "10",
+      "Max. Freq.": 3000,
+      "Min. Freq.": 2000,
+      "Dom. Freq.": 2500,
+      "Avg. Call duration.": "2.3 seg"
+    },
+    {
+      "Cluster": "2",
+      "Count": "3",
+      "Max. Freq.": 1500,
+      "Min. Freq.": 1000,
+      "Dom. Freq.": 1200,
+      "Avg. Call duration.": "1.3 seg"
+    },
+    {
+      "Cluster": "3",
+      "Count": "7",
+      "Max. Freq.": 1200,
+      "Min. Freq.": 400,
+      "Dom. Freq.": 800,
+      "Avg. Call duration.": "3.5 seg"
+    },
+    {
+      "Cluster": "4",
+      "Count": "20",
+      "Max. Freq.": 4000,
+      "Min. Freq.": 3000,
+      "Dom. Freq.": 3500,
+      "Avg. Call duration.": "1.2 seg"
+    }
+  ]
+}

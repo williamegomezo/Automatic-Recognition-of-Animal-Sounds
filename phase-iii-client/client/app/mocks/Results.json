@@ -5,6 +5,10 @@
       "type": false
     },
     {
+      "label": "Cluster",
+      "type": true
+    },
+    {
       "label": "Start",
       "type": true
     },
@@ -19,13 +23,9 @@
     {
       "label": "Min. Freq.",
       "type": true
-    },
-    {
-      "label": "Cluster",
-      "type": false
     }
   ],
-  "results": [
+  "data": [
     {
       "Filename": "JAGUAS_20180901_001050.wav",
       "Start": 8.1,

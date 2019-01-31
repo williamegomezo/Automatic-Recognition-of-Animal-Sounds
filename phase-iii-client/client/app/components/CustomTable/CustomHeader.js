@@ -15,6 +15,7 @@ class CustomHeader extends React.Component {
       onSelectAllClick,
       order,
       orderBy,
+      checkbox,
       numSelected,
       rowCount,
       headers
@@ -23,19 +24,21 @@ class CustomHeader extends React.Component {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
+          {checkbox && (
+            <TableCell padding="checkbox">
+              <Checkbox
+                indeterminate={numSelected > 0 && numSelected < rowCount}
+                checked={numSelected === rowCount}
+                onChange={onSelectAllClick}
+              />
+            </TableCell>
+          )}
           {headers.map(
             row => (
               <TableCell
                 key={row.id}
+                style={{ padding: '4px 10px' }}
                 align={row.numeric ? 'right' : 'left'}
-                padding={row.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === row.id ? order : false}
               >
                 <Tooltip

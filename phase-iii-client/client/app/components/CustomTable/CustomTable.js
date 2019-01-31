@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 import Table from '@material-ui/core/Table';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
@@ -7,36 +7,96 @@ import CustomHeader from './CustomHeader';
 import CustomBody from './CustomBody';
 import CustomToolbar from './CustomToolbar';
 import { createData } from './utils';
-import mockResults from '../../mocks/Results.json';
-
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3
-  },
-  table: {
-    minWidth: 1020
-  },
-  tableWrapper: {
-    overflowX: 'auto'
-  }
-});
 
 class CustomTable extends React.Component {
-  state = {
-    order: 'asc',
-    selected: [],
-    orderBy: mockResults.headers[0],
-    headers: mockResults.headers.map(h => ({
-      id: h.label,
-      numeric: h.type,
-      disablePadding: false,
-      label: h.label
-    })),
-    data: mockResults.results.map(createData),
-    page: 0,
-    rowsPerPage: 10
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      order: 'asc',
+      orderBy: this.props.headers ? this.props.headers[0] : [],
+      selected: [],
+      headers: this.props.headers
+        ? this.props.headers.map(h => ({
+            id: h.label,
+            numeric: h.type,
+            disablePadding: false,
+            label: h.label
+          }))
+        : [],
+      data: this.props.data ? this.props.data.map(createData) : [],
+      page: 0,
+      rowsPerPage: 10
+    };
+  }
+
+  render() {
+    const {
+      order,
+      orderBy,
+      headers,
+      data,
+      selected,
+      rowsPerPage,
+      page
+    } = this.state;
+
+    const { checkbox, moduleType } = this.props;
+    const emptyRows =
+      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+    return (
+      <Paper className="customTable__container">
+        <CustomToolbar numSelected={selected.length} />
+        <div className="customTable__wrapper">
+          <Table className="customTable__table" aria-labelledby="tableTitle">
+            <CustomHeader
+              headers={headers}
+              checkbox={checkbox}
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={this.handleSelectAllClick}
+              onRequestSort={this.handleRequestSort}
+              rowCount={data.length}
+            />
+            <CustomBody
+              data={data}
+              headers={headers}
+              checkbox={checkbox}
+              moduleType={moduleType}
+              emptyRows={emptyRows}
+              order={order}
+              orderBy={orderBy}
+              numSelected={selected.length}
+              rowCount={data.length}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              selected={selected}
+              handleClick={this.handleClick}
+              onSelectAllClick={this.handleSelectAllClick}
+              isSelected={this.isSelected}
+            />
+          </Table>
+        </div>
+        <TablePagination
+          rowsPerPageOptions={[5, 10]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            'aria-label': 'Previous Page'
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'Next Page'
+          }}
+          onChangePage={this.handleChangePage}
+          onChangeRowsPerPage={this.handleChangeRowsPerPage}
+        />
+      </Paper>
+    );
+  }
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
@@ -91,72 +151,10 @@ class CustomTable extends React.Component {
   handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: event.target.value });
   };
-
-  render() {
-    const {
-      data,
-      headers,
-      order,
-      orderBy,
-      selected,
-      rowsPerPage,
-      page
-    } = this.state;
-
-    const { classes } = this.props;
-
-    const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
-    return (
-      <Paper className={classes.root}>
-        <CustomToolbar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <CustomHeader
-              headers={headers}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <CustomBody
-              data={data}
-              headers={headers}
-              emptyRows={emptyRows}
-              order={order}
-              orderBy={orderBy}
-              numSelected={selected.length}
-              rowCount={data.length}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              selected={selected}
-              handleClick={this.handleClick}
-              onSelectAllClick={this.handleSelectAllClick}
-              isSelected={this.isSelected}
-            />
-          </Table>
-        </div>
-        <TablePagination
-          rowsPerPageOptions={[5, 10]}
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page'
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page'
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
-      </Paper>
-    );
-  }
 }
 
-export default withStyles(styles)(CustomTable);
+const mapStateToProps = state => {
+  return { selectedItem: state.selected };
+};
+
+export default connect(mapStateToProps)(CustomTable);

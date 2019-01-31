@@ -62,7 +62,18 @@ export default class Home extends Component {
               <Button variant="contained" onClick={this.selectDirectory}>
                 Select directory
               </Button>
-              <CustomPanel />
+              <CustomPanel
+                info={[
+                  {
+                    label: 'Ele 1',
+                    value: '2'
+                  },
+                  {
+                    label: 'Ele 2',
+                    value: '3'
+                  }
+                ]}
+              />
               <Divider />
               <CustomList dir={dir} buttons={fileButtons} items={files} />
             </Paper>
