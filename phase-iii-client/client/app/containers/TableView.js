@@ -11,7 +11,7 @@ import callButtons from '../constants/CallDisplayButtons.json';
 import mockResults from '../mocks/Results.json';
 import clusterResults from '../mocks/Clusters.json';
 
-export default class TableView extends Component {
+class TableView extends Component {
   state = {
     value: 0
   };
@@ -79,8 +79,12 @@ export default class TableView extends Component {
                 />
               </div>
             </div>
-            <div className="row col-xs-24">
-              <Plots headers={mockResults.headers} data={mockResults.data} />
+            <div className="row col-xs-24 plots__container">
+              <Plots
+                headers={mockResults.headers}
+                data={mockResults.data}
+                clusters={clusterResults.data}
+              />
             </div>
           </SwipeableViews>
         </div>
@@ -88,3 +92,5 @@ export default class TableView extends Component {
     );
   }
 }
+
+export default TableView;

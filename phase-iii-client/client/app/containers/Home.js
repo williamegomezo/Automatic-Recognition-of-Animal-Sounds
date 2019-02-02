@@ -12,7 +12,7 @@ import Species from '../mocks/Species.json';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -105,3 +105,5 @@ export default class Home extends Component {
     );
   }
 }
+
+export default Home;

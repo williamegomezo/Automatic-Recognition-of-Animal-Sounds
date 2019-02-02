@@ -11,7 +11,6 @@ class CustomPanel extends Component {
     for (let i = 0; i < info.length; i = i + 2) {
       chunks.push(info.slice(i, i + 2));
     }
-    console.log(info, chunks);
     return (
       <List className="col-xs-24">
         {chunks.map((c, i) => {

@@ -1,13 +1,14 @@
 import { CHANGE_SELECTION } from '../actions/action-types';
 
 const initialState = {
-  selected: []
+  selected: {}
 };
 
-function rootReducer(state = initialState, action) {
+function tableReducer(state = initialState, action) {
   if (action.type === CHANGE_SELECTION) {
     return { ...state, selected: { ...state.selected, ...action.payload } };
   }
   return state;
 }
-export default rootReducer;
+
+export default tableReducer;

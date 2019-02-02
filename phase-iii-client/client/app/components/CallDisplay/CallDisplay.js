@@ -8,7 +8,6 @@ import CustomPanel from '../CustomPanel/CustomPanel';
 class CallDisplay extends Component {
   render() {
     const { moduleType, headers, buttons, selectedItem } = this.props;
-    console.log(selectedItem[moduleType]);
     return (
       <Paper className="col-xs-off-1 col-xs-22 callDisplay__container">
         <img
@@ -41,7 +40,7 @@ class CallDisplay extends Component {
 }
 
 const mapStateToProps = state => {
-  return { selectedItem: state.selected };
+  return { selectedItem: state.tableReducer.selected };
 };
 
 export default connect(mapStateToProps)(CallDisplay);

@@ -154,7 +154,7 @@ class CustomTable extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { selectedItem: state.selected };
+  return { selectedItem: state.tableReducer.selected };
 };
 
 export default connect(mapStateToProps)(CustomTable);
