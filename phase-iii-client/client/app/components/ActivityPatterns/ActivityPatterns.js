@@ -95,8 +95,8 @@ class ActivityPatterns extends Component {
                 value={selectedMonth}
                 onChange={this.handleChangeMonth}
               >
-                {uniqueMonths.map(month => (
-                  <MenuItem className="col-xs-21" value={month}>
+                {uniqueMonths.map((month, i) => (
+                  <MenuItem key={i} className="col-xs-21" value={month}>
                     {month}
                   </MenuItem>
                 ))}
@@ -114,8 +114,8 @@ class ActivityPatterns extends Component {
                   value={selectedDay}
                   onChange={this.handleChangeDay}
                 >
-                  {uniqueDays.map(day => (
-                    <MenuItem className="col-xs-21" value={day}>
+                  {uniqueDays.map((day, i) => (
+                    <MenuItem key={i} className="col-xs-21" value={day}>
                       {day}
                     </MenuItem>
                   ))}

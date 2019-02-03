@@ -1,20 +1,27 @@
 // @flow
 import React, { Component } from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
+import Fab from '@material-ui/core/Fab';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Tooltip from '@material-ui/core/Tooltip';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import CustomTable from '../components/CustomTable/CustomTable';
 import CallDisplay from '../components/CallDisplay/CallDisplay';
 import Plots from '../components/Plots/Plots';
 import ActivityPatterns from '../components/ActivityPatterns/ActivityPatterns';
+import Alert from '../components/Alert/Alert';
 import callButtons from '../constants/CallDisplayButtons.json';
 import mockResults from '../mocks/Results.json';
 import clusterResults from '../mocks/Clusters.json';
+import routes from '../constants/routes.json';
 
 class TableView extends Component {
   state = {
-    value: 0
+    value: 0,
+    openDialog: false
   };
 
   handleChange = (event, value) => {
@@ -25,10 +32,21 @@ class TableView extends Component {
     this.setState({ value: index });
   };
 
+  handleGoBack = () => {
+    this.setState({ openDialog: true });
+  };
+
   render() {
     return (
-      <div>
-        <div>
+      <div className="row col-xs-24">
+        <div className="row col-xs-2 center-xs">
+          <Tooltip title={'Initial screen'}>
+            <Fab>
+              <ArrowBack onClick={this.handleGoBack} />
+            </Fab>
+          </Tooltip>
+        </div>
+        <div className="row col-xs-22">
           <AppBar position="static" color="default">
             <Tabs
               value={this.state.value}
@@ -95,6 +113,17 @@ class TableView extends Component {
             </div>
           </SwipeableViews>
         </div>
+        <Alert
+          open={this.state.openDialog}
+          title="Warning!"
+          content="You are returning to the initial screen, the results will be erased. Do you want to continue?"
+          firstButtonText="No"
+          firstButtonCallback={() => {}}
+          secondButtonText="Yes"
+          secondButtonCallback={() => {
+            this.props.history.push(routes.HOME);
+          }}
+        />
       </div>
     );
   }

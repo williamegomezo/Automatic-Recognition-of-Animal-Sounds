@@ -8,9 +8,11 @@ import fs from 'fs';
 import path from 'path';
 import CustomList from '../components/CustomList/CustomList';
 import CustomPanel from '../components/CustomPanel/CustomPanel';
+import DialogLoader from '../components/DialogLoader/DialogLoader';
 import Species from '../mocks/Species.json';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
+import { getData } from '../utils/promises';
 
 class Home extends Component {
   constructor(props) {
@@ -19,10 +21,9 @@ class Home extends Component {
     this.state = {
       dir: '',
       files: [],
-      species: []
+      species: [],
+      addingSpeciesDialog: false
     };
-
-    this.getSpecies = this.getSpecies.bind(this);
   }
 
   componentDidMount() {
@@ -46,31 +47,57 @@ class Home extends Component {
     );
   };
 
-  getSpecies() {
+  getSpecies = () => {
     this.setState({ species: Species });
-  }
+  };
+
+  addingSpecies = () => {
+    this.setState({ addingSpeciesDialog: true });
+  };
+
+  requestClusters = () => {
+    const { dir, files } = this.state;
+    getData('get-clusters', 'POST', {
+      dir,
+      files
+    });
+  };
 
   render() {
-    const { dir, files, species } = this.state;
+    const { dir, files, species, addingSpeciesDialog } = this.state;
+    const tree = dir.split('/');
     return (
       <div className="column col-xs-24 center-xs" data-tid="container">
         <h1>Aureas</h1>
         <div className="row col-xs-24 center-xs">
           <div className="col-xs-11">
             <Paper elevation={1}>
-              <h2>Folder</h2>
+              <h2>Files</h2>
               <Button variant="contained" onClick={this.selectDirectory}>
                 Select directory
               </Button>
+              <h3>Directory:</h3>
+              <span> {`...${tree.slice(tree.length - 2).join('/')}`}</span>
               <CustomPanel
                 info={[
                   {
-                    label: 'Ele 1',
-                    value: '2'
+                    label: 'Number of files',
+                    value: files.length
                   },
                   {
-                    label: 'Ele 2',
-                    value: '3'
+                    label: 'Years',
+                    value:
+                      files.length > 0 ? this.uniqueYears(files).join(', ') : 0
+                  },
+                  {
+                    label: 'Months',
+                    value:
+                      files.length > 0 ? this.uniqueMonths(files).join(', ') : 0
+                  },
+                  {
+                    label: 'Days',
+                    value:
+                      files.length > 0 ? this.uniqueDays(files).join(', ') : 0
                   }
                 ]}
               />
@@ -79,7 +106,7 @@ class Home extends Component {
             </Paper>
           </div>
           <div className="col-xs-off-1 col-xs-11 row-xs-24 column">
-            <div className="row-xs-20">
+            <div className="row-xs-16">
               <Paper elevation={1}>
                 <h2>Species</h2>
                 <CustomList
@@ -88,7 +115,10 @@ class Home extends Component {
                   items={species}
                   addButton={{
                     text: 'Add species',
-                    link: '/table'
+                    callback: () => {
+                      this.addingSpecies();
+                      this.requestClusters();
+                    }
                   }}
                 />
               </Paper>
@@ -101,8 +131,40 @@ class Home extends Component {
             </div>
           </div>
         </div>
+        <DialogLoader
+          open={addingSpeciesDialog}
+          progress={50}
+          title={'Looking for new species...'}
+          content={'Segmentation of files'}
+          cancelCallback={() => {}}
+        />
       </div>
     );
+  }
+
+  uniqueYears(data) {
+    const years = data.map(datum =>
+      Number(datum.split('_')[1].substring(0, 4))
+    );
+    return years
+      .filter((d, i) => years.indexOf(d) === i)
+      .sort((a, b) => (a > b ? 1 : -1));
+  }
+
+  uniqueMonths(data) {
+    const months = data.map(datum =>
+      Number(datum.split('_')[1].substring(4, 6))
+    );
+    return months
+      .filter((d, i) => months.indexOf(d) === i)
+      .sort((a, b) => (a > b ? 1 : -1));
+  }
+
+  uniqueDays(data) {
+    const days = data.map(datum => Number(datum.split('_')[1].substring(6, 8)));
+    return days
+      .filter((d, i) => days.indexOf(d) === i)
+      .sort((a, b) => (a > b ? 1 : -1));
   }
 }
 

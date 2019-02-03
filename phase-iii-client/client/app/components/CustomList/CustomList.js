@@ -7,9 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
-import { Link } from 'react-router-dom';
 import CustomListItem from './CustomListItem';
-import routes from '../../constants/routes';
 
 class CustomList extends Component {
   constructor(props) {
@@ -80,11 +78,9 @@ class CustomList extends Component {
         </List>
         {addButton && (
           <Tooltip title={addButton.text}>
-            <Link to={routes.TABLE}>
-              <Fab style={styles.listFloatButton}>
-                <AddIcon />
-              </Fab>
-            </Link>
+            <Fab style={styles.listFloatButton}>
+              <AddIcon onClick={addButton.callback} />
+            </Fab>
           </Tooltip>
         )}
       </div>

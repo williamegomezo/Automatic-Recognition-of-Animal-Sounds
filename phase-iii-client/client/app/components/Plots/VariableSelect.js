@@ -42,8 +42,9 @@ class VariableSelect extends Component {
             value={radioValue}
             onChange={this.radioChange}
           >
-            {options.map(o => (
+            {options.map((o, i) => (
               <FormControlLabel
+                key={i}
                 value={o.label}
                 control={<Radio />}
                 label={o.label}
