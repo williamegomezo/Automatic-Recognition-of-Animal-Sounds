@@ -8,6 +8,18 @@ import { changeSelection } from '../../store/actions';
 import { stableSort, getSorting } from './utils';
 
 class CustomBody extends React.Component {
+  constructor(props) {
+    super(props);
+    this.isCurrentClicked = this.isCurrentClicked.bind(this);
+  }
+
+  isCurrentClicked(id) {
+    const { currentClicked, moduleType } = this.props;
+    return (
+      currentClicked[moduleType] && currentClicked[moduleType]['id'] === id
+    );
+  }
+
   render() {
     const {
       data,
@@ -28,21 +40,23 @@ class CustomBody extends React.Component {
         {stableSort(data, getSorting(order, orderBy))
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           .map(n => {
-            const isSelectedClosure = isSelected(n.id);
+            const isSelectedValue = isSelected(n.id);
+            const isCurrentValue = this.isCurrentClicked(n.id);
             return (
               <TableRow
                 hover
                 role="checkbox"
                 onClick={() => this.props.changeSelection({ [moduleType]: n })}
-                aria-checked={isSelectedClosure}
+                aria-checked={isSelectedValue}
                 tabIndex={-1}
                 key={n.id}
+                selected={isCurrentValue}
               >
                 {checkbox && (
                   <TableCell padding="checkbox">
                     <Checkbox
                       onChange={event => handleClick(event, n.id)}
-                      checked={isSelectedClosure}
+                      checked={isSelectedValue}
                     />
                   </TableCell>
                 )}
@@ -69,6 +83,10 @@ class CustomBody extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return { currentClicked: state.tableReducer.selected };
+};
+
 function mapDispatchToProps(dispatch) {
   return {
     changeSelection: item => dispatch(changeSelection(item))
@@ -76,6 +94,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(CustomBody);

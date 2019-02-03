@@ -24,7 +24,7 @@ class Plots extends Component {
 
   render() {
     const { dataPlot, options } = this.state;
-    const { headers, data } = this.props;
+    const { headers } = this.props;
     return (
       <FormControl className="col-xs-24">
         <div className="row col-xs-24 center-xs">
@@ -48,7 +48,7 @@ class Plots extends Component {
                 className="plots__scatter"
                 data={dataPlot}
                 options={options}
-                height={170}
+                height={100}
               />
             </Paper>
           </div>

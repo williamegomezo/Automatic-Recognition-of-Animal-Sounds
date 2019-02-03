@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import CustomTable from '../components/CustomTable/CustomTable';
 import CallDisplay from '../components/CallDisplay/CallDisplay';
 import Plots from '../components/Plots/Plots';
+import ActivityPatterns from '../components/ActivityPatterns/ActivityPatterns';
 import callButtons from '../constants/CallDisplayButtons.json';
 import mockResults from '../mocks/Results.json';
 import clusterResults from '../mocks/Clusters.json';
@@ -82,6 +83,12 @@ class TableView extends Component {
             <div className="row col-xs-24 plots__container">
               <Plots
                 headers={mockResults.headers}
+                data={mockResults.data}
+                clusters={clusterResults.data}
+              />
+            </div>
+            <div className="row col-xs-24">
+              <ActivityPatterns
                 data={mockResults.data}
                 clusters={clusterResults.data}
               />
