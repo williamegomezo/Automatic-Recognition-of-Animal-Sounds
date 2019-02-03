@@ -13,6 +13,11 @@ class CustomBody extends React.Component {
     this.isCurrentClicked = this.isCurrentClicked.bind(this);
   }
 
+  componentDidMount() {
+    const { data, moduleType, changeSelection } = this.props;
+    changeSelection({ [moduleType]: data[0] });
+  }
+
   isCurrentClicked(id) {
     const { currentClicked, moduleType } = this.props;
     return (

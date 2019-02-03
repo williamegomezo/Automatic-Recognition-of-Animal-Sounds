@@ -48,7 +48,7 @@ class Plots extends Component {
                 className="plots__scatter"
                 data={dataPlot}
                 options={options}
-                height={100}
+                height={120}
               />
             </Paper>
           </div>
