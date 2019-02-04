@@ -79,7 +79,7 @@ def get_representative_calls(recon, data, metadata):
         index_representative[i] = np.argmin(distances)
         meta_representative = metadata[indices[index_representative[i]]]
         representive_calls.append([str(i), str(len(
-            indices)), *(meta_representative[4:7].tolist()), str(np.mean(metadata[indices, 3].astype(float)))])
+            indices)), *(meta_representative[4:7].tolist()), str(np.around(np.mean(metadata[indices, 3].astype(float)), 2))])
     return representive_calls
 
 
@@ -102,6 +102,7 @@ def process_files(directory, files):
             segs, nfilters, nc, nframes)
         segs = np.delete(np.array(segs), features_removed)[:, None]
         metadata = np.delete(np.array(metadata), features_removed, axis=0)
+        metadata = np.around(metadata, 2)
         titles = np.tile(np.array([file]), (metadata.shape[0], 1))
         metadata = np.hstack((titles, metadata))
 

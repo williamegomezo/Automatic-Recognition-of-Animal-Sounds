@@ -9,7 +9,6 @@ import path from 'path';
 import CustomList from '../components/CustomList/CustomList';
 import CustomPanel from '../components/CustomPanel/CustomPanel';
 import DialogLoader from '../components/DialogLoader/DialogLoader';
-import Species from '../mocks/Species.json';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
 import { getData } from '../utils/promises';
@@ -49,7 +48,7 @@ class Home extends Component {
   };
 
   getSpecies = () => {
-    this.setState({ species: Species });
+    this.setState({ species: [] });
   };
 
   addingSpecies = () => {

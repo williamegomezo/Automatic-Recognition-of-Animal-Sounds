@@ -8,27 +8,27 @@ headers_data = [
         "type": True
     },
     {
-        "label": "Start",
+        "label": "Start [s]",
         "type": True
     },
     {
-        "label": "End",
+        "label": "End [s]",
         "type": True
     },
     {
-        "label": "Call duration",
+        "label": "Call duration [s]",
         "type": True
     },
     {
-        "label": "Min. Freq.",
+        "label": "Min. Freq. [Hz]",
         "type": True
     },
     {
-        "label": "Max. Freq.",
+        "label": "Max. Freq. [Hz]",
         "type": True
     },
     {
-        "label": "Dom. Freq.",
+        "label": "Dom. Freq. [Hz]",
         "type": True
     }
 ]
@@ -43,19 +43,19 @@ headers_clusters = [
         "type": True
     },
     {
-        "label": "Min. Freq.",
+        "label": "Min. Freq. [Hz]",
         "type": True
     },
     {
-        "label": "Max. Freq.",
+        "label": "Max. Freq. [Hz]",
         "type": True
     },
     {
-        "label": "Dom. Freq.",
+        "label": "Dom. Freq. [Hz]",
         "type": True
     },
     {
-        "label": "Avg. call duration",
+        "label": "Avg. call duration [s]",
         "type": True
     }
 ]
