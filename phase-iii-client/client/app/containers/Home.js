@@ -13,6 +13,7 @@ import Species from '../mocks/Species.json';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
 import { getData } from '../utils/promises';
+import routes from '../constants/routes.json';
 
 class Home extends Component {
   constructor(props) {
@@ -60,6 +61,8 @@ class Home extends Component {
     getData('get-clusters', 'POST', {
       dir,
       files
+    }).then(resp => {
+      this.props.history.push(routes.TABLE, resp);
     });
   };
 

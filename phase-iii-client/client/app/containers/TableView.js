@@ -14,15 +14,19 @@ import Plots from '../components/Plots/Plots';
 import ActivityPatterns from '../components/ActivityPatterns/ActivityPatterns';
 import Alert from '../components/Alert/Alert';
 import callButtons from '../constants/CallDisplayButtons.json';
-import mockResults from '../mocks/Results.json';
-import clusterResults from '../mocks/Clusters.json';
 import routes from '../constants/routes.json';
 
 class TableView extends Component {
-  state = {
-    value: 0,
-    openDialog: false
-  };
+  constructor(props) {
+    super(props);
+    console.log(props);
+    this.state = {
+      value: 0,
+      openDialog: false,
+      results: props.history.location.state.results,
+      clusters: props.history.location.state.clusters
+    };
+  }
 
   handleChange = (event, value) => {
     this.setState({ value });
@@ -69,15 +73,15 @@ class TableView extends Component {
               <div className="col-xs-16">
                 <CustomTable
                   moduleType="results_table"
-                  headers={mockResults.headers}
-                  data={mockResults.data}
+                  headers={this.state.results.headers}
+                  data={this.state.results.data}
                   checkbox
                 />
               </div>
               <div className="col-xs-8">
                 <CallDisplay
                   moduleType="results_table"
-                  headers={mockResults.headers}
+                  headers={this.state.results.headers}
                   buttons={callButtons}
                 />
               </div>
@@ -86,29 +90,29 @@ class TableView extends Component {
               <div className="col-xs-16">
                 <CustomTable
                   moduleType="cluster_table"
-                  headers={clusterResults.headers}
-                  data={clusterResults.data}
+                  headers={this.state.clusters.headers}
+                  data={this.state.clusters.data}
                 />
               </div>
               <div className="col-xs-8">
                 <CallDisplay
                   moduleType="cluster_table"
-                  headers={clusterResults.headers}
+                  headers={this.state.clusters.headers}
                   buttons={callButtons}
                 />
               </div>
             </div>
             <div className="row col-xs-24 plots__container">
               <Plots
-                headers={mockResults.headers}
-                data={mockResults.data}
-                clusters={clusterResults.data}
+                headers={this.state.results.headers}
+                data={this.state.results.data}
+                clusters={this.state.clusters.data}
               />
             </div>
             <div className="row col-xs-24">
               <ActivityPatterns
-                data={mockResults.data}
-                clusters={clusterResults.data}
+                data={this.state.results.data}
+                clusters={this.state.clusters.data}
               />
             </div>
           </SwipeableViews>

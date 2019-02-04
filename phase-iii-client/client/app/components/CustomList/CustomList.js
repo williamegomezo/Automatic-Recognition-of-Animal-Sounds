@@ -78,8 +78,8 @@ class CustomList extends Component {
         </List>
         {addButton && (
           <Tooltip title={addButton.text}>
-            <Fab style={styles.listFloatButton}>
-              <AddIcon onClick={addButton.callback} />
+            <Fab onClick={addButton.callback} style={styles.listFloatButton}>
+              <AddIcon />
             </Fab>
           </Tooltip>
         )}
