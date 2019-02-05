@@ -1,12 +1,7 @@
 [
   {
     "name": "PlayStop",
-    "tooltips": ["Play", "Stop"],
-    "callbacks": ["playItem", "stopItem"]
-  },
-  {
-    "name": "Spectrogram",
-    "tooltips": ["View in spectrogram"],
-    "callbacks": ["getSpectrogram"]
+    "tooltips": ["Play"],
+    "callbacks": ["playItem"]
   }
 ]

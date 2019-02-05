@@ -54,12 +54,14 @@ class FileUtils:
 
         audio_path = self.save_audio(
             meta_representative[-1], 'clusters/audios/', meta_representative[0], name)
-        return audio_path, spectrogram_utils.get_segment_in_image(meta_representative[-1],
-                                                                  meta_representative[0], 1, float(
+
+        image_path = spectrogram_utils.get_segment_in_image(meta_representative[-1],
+                                                            meta_representative[0], 1, float(
             meta_representative[1]),
             float(meta_representative[2]), float(
             meta_representative[4]),
             float(meta_representative[5]), 'clusters/images/', name)
+        return audio_path, image_path, meta_representative
 
     def save_audio(self, origin_dir, destination_dir, origin_filename, destination_filename):
         dir_utils.create_dir(destination_dir)

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 import { remote } from 'electron';
 import fs from 'fs';
 import path from 'path';
@@ -12,7 +13,7 @@ import CustomPanel from '../components/CustomPanel/CustomPanel';
 import DialogLoader from '../components/DialogLoader/DialogLoader';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
-import { changeDir } from '../store/actions';
+import { changeDir, setSpecies } from '../store/actions';
 import { getData } from '../utils/promises';
 import routes from '../constants/routes.json';
 
@@ -21,6 +22,8 @@ class Home extends Component {
     super(props);
 
     this.state = {
+      error: false,
+      errorMsg: '',
       dir: '',
       files: [],
       species: [],
@@ -51,11 +54,20 @@ class Home extends Component {
   };
 
   getSpecies = () => {
-    getData('get-species-path', 'GET').then(resp => {
-      fs.readdir(resp.path + '/model', (err, files) => {
-        if (err) throw console.log;
-        this.setState({ species: files });
-      });
+    getData('get-species', 'GET').then(resp => {
+      const formatedSpecies = resp.map(specie => ({
+        'Species Name': specie['name'],
+        'Start. [s]': specie['metadata'][1],
+        'End. [s]': specie['metadata'][2],
+        'Min. Freq. [Hz]': specie['metadata'][4],
+        'Max. Freq. [Hz]': specie['metadata'][5],
+        'Dom. Freq. [Hz]': specie['metadata'][6],
+        'Avg. call duration [s]': specie['metadata'][3],
+        'audio path': specie['audio_path'],
+        'image path': specie['image_path']
+      }));
+      this.setState({ species: resp.map(specie => specie['name']) });
+      this.props.setSpecies(formatedSpecies);
     });
   };
 
@@ -65,16 +77,38 @@ class Home extends Component {
 
   requestClusters = () => {
     const { dir, files } = this.state;
-    getData('get-clusters', 'POST', {
-      dir,
-      files
-    }).then(resp => {
-      this.props.history.push(routes.TABLE, resp);
-    });
+    if (files.length > 0) {
+      getData('get-clusters', 'POST', {
+        dir,
+        files
+      }).then(resp => {
+        this.props.history.push(routes.TABLE, resp);
+      });
+    } else {
+      this.setState(
+        {
+          addingSpeciesDialog: false,
+          error: true,
+          errorMsg: 'No files in left panel'
+        },
+        () => {
+          setTimeout(() => {
+            this.setState({ error: false, errorMsg: '' });
+          }, 2000);
+        }
+      );
+    }
   };
 
   render() {
-    const { dir, files, species, addingSpeciesDialog } = this.state;
+    const {
+      dir,
+      files,
+      species,
+      addingSpeciesDialog,
+      error,
+      errorMsg
+    } = this.state;
     const tree = dir.split('/');
     return (
       <div className="column col-xs-24 center-xs" data-tid="container">
@@ -141,6 +175,11 @@ class Home extends Component {
             </div>
           </div>
         </div>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          open={error}
+          message={errorMsg}
+        />
         <DialogLoader
           open={addingSpeciesDialog}
           progress={50}
@@ -180,7 +219,8 @@ class Home extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeDir: value => dispatch(changeDir(value))
+    changeDir: value => dispatch(changeDir(value)),
+    setSpecies: value => dispatch(setSpecies(value))
   };
 }
 

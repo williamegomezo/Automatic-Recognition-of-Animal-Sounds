@@ -45,7 +45,8 @@ export default class CustomButton extends Component {
             }
           }}
         >
-          {name === 'PlayStop' && (status === 0 ? <PlayArrow /> : <Stop />)}
+          {name === 'PlayStop' &&
+            (status === 1 && onClick.length > 1 ? <Stop /> : <PlayArrow />)}
           {name === 'Spectrogram' && <Gradient />}
           {name === 'RepresentativeCall' && <GraphicEq />}
         </IconButton>

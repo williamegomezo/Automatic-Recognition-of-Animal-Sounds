@@ -68,6 +68,7 @@ class CustomList extends Component {
           )}
           {filteredItems.map((item, key) => (
             <CustomListItem
+              id={key}
               key={key}
               dir={dir}
               primary={item}

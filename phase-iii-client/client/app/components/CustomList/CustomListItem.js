@@ -1,14 +1,17 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import CustomButton from '../CustomButton/CustomButton';
 import CustomDialog from '../CustomDialog/CustomDialog';
+import { changeSelection } from '../../store/actions';
 
-export default class CustomListItem extends Component {
+class CustomListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      modeDialog: '',
       dialogOpened: false,
       checked: false,
       audio: null
@@ -39,11 +42,14 @@ export default class CustomListItem extends Component {
     this.state.audio.pause();
   }
 
-  getSpectrogram() {
+  getSpectrogram(id) {
+    this.setState({ modeDialog: 'SpectrogramDisplay' });
     this.openDialog();
   }
 
-  getRepresentiveCall() {
+  getRepresentiveCall(id) {
+    this.props.changeSelection({ list_initial: this.props.species[id] });
+    this.setState({ modeDialog: 'CallDisplay' });
     this.openDialog();
   }
 
@@ -56,8 +62,8 @@ export default class CustomListItem extends Component {
   }
 
   render() {
-    const { primary, checkbox, buttons } = this.props;
-    const { dialogOpened, checked } = this.state;
+    const { id, primary, checkbox, buttons } = this.props;
+    const { modeDialog, dialogOpened, checked } = this.state;
     return (
       <ListItem dense button>
         <div className="row middle-xs col-xs-24">
@@ -67,7 +73,9 @@ export default class CustomListItem extends Component {
                 key={key}
                 name={button.name}
                 tooltips={button.tooltips}
-                onClick={button.callbacks.map(c => this[c])}
+                onClick={button.callbacks.map(callbackName => {
+                  return () => this[callbackName](id);
+                })}
               />
             ))}
           <div onClick={this.toggleCheck}>
@@ -77,7 +85,11 @@ export default class CustomListItem extends Component {
             <span style={styles.text}>{primary}</span>
           </div>
         </div>
-        <CustomDialog open={dialogOpened} handleClose={this.closeDialog} />
+        <CustomDialog
+          open={dialogOpened}
+          handleClose={this.closeDialog}
+          mode={modeDialog}
+        />
       </ListItem>
     );
   }
@@ -93,3 +105,21 @@ const styles = {
     textOverflow: 'ellipsis'
   }
 };
+
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    species: state.speciesReducer.species
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeSelection: item => dispatch(changeSelection(item))
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CustomListItem);

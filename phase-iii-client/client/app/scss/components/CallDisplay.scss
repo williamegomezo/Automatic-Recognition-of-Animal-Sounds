@@ -1,5 +1,6 @@
 .callDisplay {
   &__container {
+    width: 100%;
     margin-top: 24px;
   }
 
@@ -15,7 +16,6 @@
   &__img {
     margin-top: 24px;
     width: 100%;
-    height: 220px;
   }
 
   &__buttons {

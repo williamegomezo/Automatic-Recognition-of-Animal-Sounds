@@ -5,19 +5,36 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CustomButton from '../CustomButton/CustomButton';
 import CustomPanel from '../CustomPanel/CustomPanel';
+import buttons from '../../constants/CallDisplayButtons';
 
 class CallDisplay extends Component {
+  playItem = () => {
+    const { selectedItem, moduleType } = this.props;
+    const audioPath = selectedItem[moduleType]['audio path'];
+    const audio = new Audio(audioPath);
+    const start = Number(selectedItem[moduleType]['Start. [s]']) - 0.2;
+    const stop = Number(selectedItem[moduleType]['End. [s]']) + 0.2;
+    audio.currentTime = start;
+    audio.play();
+    setTimeout(() => audio.pause(), (stop - start) * 1000);
+  };
+
   render() {
-    const { moduleType, headers, buttons, selectedItem } = this.props;
-    const imageUrl =
+    const { moduleType, headers, selectedItem } = this.props;
+
+    let imageUrl =
       selectedItem[moduleType] && selectedItem[moduleType]['url']
         ? selectedItem[moduleType]['url'] + '.png'
         : 'https://via.placeholder.com/400.png';
+    if (moduleType === 'list_initial') {
+      imageUrl = selectedItem[moduleType]['image path'] + '.png';
+    }
     return (
       <Paper className="col-xs-off-1 col-xs-22 callDisplay__container">
-        {selectedItem[moduleType] &&
-        selectedItem[moduleType]['url'] &&
-        imageUrl !== 'NONE.png' ? (
+        {selectedItem[moduleType]['image path'] ||
+        (selectedItem[moduleType] &&
+          selectedItem[moduleType]['url'] &&
+          imageUrl !== 'NONE.png') ? (
           <img
             className="col-xs-off-1 col-xs-22 callDisplay__img"
             src={imageUrl}

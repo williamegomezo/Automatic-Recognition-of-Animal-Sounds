@@ -18,8 +18,14 @@ dir_utils = DirUtils()
 
 @api_view(['GET'])
 @parser_classes((JSONParser,))
-def get_species_path(request):
-    return HttpResponse(json.dumps({'path': os.path.abspath('clusters')}, separators=(',', ':')))
+def get_species(request):
+    species = os.listdir('clusters/model/')
+    species_data = []
+    for specie in species:
+        with open('clusters/model/' + specie, 'r') as infile:
+            data = json.load(infile)
+            species_data.append(data)
+    return HttpResponse(json.dumps(species_data, separators=(',', ':')))
 
 
 @api_view(['GET', 'POST'])
@@ -113,11 +119,12 @@ def save_cluster(request):
 
         indices = np.array(data['selected'])
 
-        audio_path, image_path = file_utils.save_representative_call(
+        audio_path, image_path, metadata_representative = file_utils.save_representative_call(
             data['name'], features[indices], metadata[indices])
 
         model = {
             'name': data['name'],
+            'metadata': metadata_representative.tolist(),
             'mean_values': np.mean(features[indices], axis=0).tolist(),
             'min_values': min_values,
             'max_values': max_values,

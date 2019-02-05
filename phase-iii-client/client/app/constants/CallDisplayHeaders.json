@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Species Name",
+    "type": true
+  },
+  {
+    "label": "Min. Freq. [Hz]",
+    "type": true
+  },
+  {
+    "label": "Max. Freq. [Hz]",
+    "type": true
+  },
+  {
+    "label": "Dom. Freq. [Hz]",
+    "type": true
+  },
+  {
+    "label": "Avg. call duration [s]",
+    "type": true
+  }
+]

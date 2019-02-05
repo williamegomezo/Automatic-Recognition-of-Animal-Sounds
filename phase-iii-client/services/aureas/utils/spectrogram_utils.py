@@ -120,18 +120,23 @@ class SpectrogramUtils:
 
     def get_intervals_from_ones(self, indices, projection):
         # Threshold are added in order of priority, first threholds are more important
+
         derivative_threshold = np.diff(indices)
 
         thresholds_indices = np.where(np.abs(derivative_threshold))[0]
 
-        # If the first derivative is -1, the interval already began
-        if derivative_threshold[thresholds_indices[0]] == -1:
-            thresholds_indices = np.insert(thresholds_indices, 0, 0)
+        if len(thresholds_indices) != 0:
+            # If the first derivative is -1, the interval already began
+            if derivative_threshold[thresholds_indices[0]] == -1:
+                thresholds_indices = np.insert(thresholds_indices, 0, 0)
 
-        # If the last derivative is 1, the interval already began
-        if derivative_threshold[thresholds_indices[-1]] == 1:
-            thresholds_indices = np.append(
-                thresholds_indices, len(projection))
+            # If the last derivative is 1, the interval already began
+            if derivative_threshold[thresholds_indices[-1]] == 1:
+                thresholds_indices = np.append(
+                    thresholds_indices, len(projection))
+        else:
+            thresholds_indices = np.insert(thresholds_indices, 0, 0)
+            thresholds_indices = np.append(thresholds_indices, len(projection))
 
         return thresholds_indices
 
