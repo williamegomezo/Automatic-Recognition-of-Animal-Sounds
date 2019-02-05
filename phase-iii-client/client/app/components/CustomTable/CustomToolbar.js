@@ -1,13 +1,61 @@
-import React from 'react';
-import classNames from 'classnames';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import Add from '@material-ui/icons/Add';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import ClusterDialog from './../ClusterDialog/ClusterDialog';
+
+class CustomToolbar extends Component {
+  state = {
+    clusterDialogOpened: false
+  };
+
+  saveCluster = () => {
+    this.setState({ clusterDialogOpened: true });
+  };
+
+  componentWillReceiveProps() {
+    this.setState({ clusterDialogOpened: false });
+  }
+
+  render() {
+    const { selected, classes, model } = this.props;
+    const numSelected = selected.length;
+    return (
+      <Toolbar className={classes.root}>
+        <div className={classes.title}>
+          {numSelected > 0 ? (
+            <Typography variant="h6" id="tableTitle">
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography variant="h6" id="tableTitle">
+              Results:
+            </Typography>
+          )}
+        </div>
+        <div className={classes.spacer} />
+        <div className={classes.actions}>
+          {numSelected > 0 && (
+            <Tooltip title="Create a species cluster">
+              <IconButton aria-label="createCluster" onClick={this.saveCluster}>
+                <Add />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
+        <ClusterDialog
+          open={this.state.clusterDialogOpened}
+          selected={selected}
+          model={model}
+        />
+      </Toolbar>
+    );
+  }
+}
 
 const toolbarStyles = theme => ({
   root: {
@@ -33,41 +81,5 @@ const toolbarStyles = theme => ({
     flex: '0 0 auto'
   }
 });
-
-let CustomToolbar = props => {
-  const { numSelected, classes } = props;
-
-  return (
-    <Toolbar className={classes.root}>
-      <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography variant="h6" id="tableTitle">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography variant="h6" id="tableTitle">
-            Results:
-          </Typography>
-        )}
-      </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </div>
-    </Toolbar>
-  );
-};
 
 export default withStyles(toolbarStyles)(CustomToolbar);

@@ -3,6 +3,10 @@ from scipy.io.wavfile import read
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import numpy as np
+import os
+from .dir_utils import DirUtils
+
+dir_utils = DirUtils()
 
 
 class SpectrogramUtils:
@@ -13,7 +17,7 @@ class SpectrogramUtils:
 
     def get_spectrogram_hd(self, x, fs):
         f, t, Sxx = signal.spectrogram(
-            x, fs, window=signal.get_window('hann', 512), nfft=4096, noverlap=256)
+            x, fs, window=signal.get_window('hann', 1024), nfft=4096, noverlap=1000)
         return f, t, Sxx
 
     def get_spectrogram_image(self, directory, filename, channel):
@@ -98,16 +102,19 @@ class SpectrogramUtils:
 
             if i == 0:
                 for j in range(int(len(thresholds_indices)/2)):  # For each pair of indices
-                    threshold_list[i][thresholds_indices[2*j]                                      :thresholds_indices[2*j+1]] = 1
+                    threshold_list[i][thresholds_indices[2*j]
+                        :thresholds_indices[2*j+1]] = 1
             else:
                 for j in range(int(len(thresholds_indices)/2)):  # For each pair of indices
                     previous = i - 1
                     previous_threshold_ranges = threshold_list[previous][
                         thresholds_indices[2*j]:thresholds_indices[2*j+1]]
-                    current_threshold_ranges = threshold_list[i][thresholds_indices[2*j]                                                                 :thresholds_indices[2*j+1]]
+                    current_threshold_ranges = threshold_list[i][thresholds_indices[2*j]
+                        :thresholds_indices[2*j+1]]
 
                     if np.sum(np.logical_and(current_threshold_ranges, previous_threshold_ranges)):
-                        threshold_list[i][thresholds_indices[2*j]                                          :thresholds_indices[2*j+1]] = previous_threshold_ranges
+                        threshold_list[i][thresholds_indices[2*j]
+                            :thresholds_indices[2*j+1]] = previous_threshold_ranges
         return self.get_intervals_from_ones(
             threshold_list[-1], neg_projection)
 
@@ -287,3 +294,39 @@ class SpectrogramUtils:
         plt.savefig('temp/segments_in_image/' + filename +
                     '.png', format='png', dpi=1000)
         return 'temp/' + filename + '.png'
+
+    def get_segment_in_image(self, directory, filename, channel, start, end, min_freq, max_freq, dir_to_save='temp/segment_image/', filename_to_save=''):
+        fs, x = read(directory + '/' + filename)
+        length = len(x)/fs
+        start_point = int(len(x)*start/length)
+        end_point = int(len(x)*end/length)
+
+        if (start_point < 0):
+            start_point = 0
+        if (end_point >= len(x)):
+            end_point = len(x) - 1
+
+        f, t, Sxx = self.get_spectrogram_hd(
+            x[start_point:end_point, channel - 1], fs)
+        min_freq_point = int(Sxx.shape[0]*min_freq/(fs/2))
+        max_freq_point = int(Sxx.shape[0]*max_freq/(fs/2))
+
+        if (min_freq_point < 0):
+            min_freq_point = 0
+        if (max_freq_point >= Sxx.shape[0]):
+            max_freq_point = Sxx.shape[0] - 1
+
+        seg = Sxx[min_freq_point:max_freq_point, :]
+        plt.figure()
+        plt.pcolormesh(np.linspace(end, start, seg.shape[1]), np.linspace(
+            min_freq, max_freq, seg.shape[0]), np.flip(seg ** (1/8), 1))
+        plt.ylabel('Frequency [Hz]')
+        plt.xlabel('Time [sec]')
+
+        dir_utils.create_dir(dir_to_save)
+
+        filename = filename_to_save + '.png' if filename_to_save != '' else filename
+        saved_filename = f'{dir_to_save}{filename}_{np.around(start,2)}_{np.around(end,2)}_{np.around(min_freq,2)}_{np.around(max_freq,2)}'
+        saved_filename = saved_filename.replace('.', '_')
+        plt.savefig(saved_filename + '.png', format='png', dpi=100)
+        return os.path.abspath(saved_filename)

@@ -7,7 +7,12 @@ import numpy as np
 from .utils.spectrogram_utils import SpectrogramUtils
 from .utils.feature_extraction_utils import FeatureExtractionUtils
 from .utils.classification_utils import ClassificationUtils
-from .constants.headers import headers_data, headers_clusters
+from .utils.file_utils import FileUtils
+from .utils.dir_utils import DirUtils
+from .constants.headers import headers_data, headers_clusters, headers_clusters_no_display
+
+file_utils = FileUtils()
+dir_utils = DirUtils()
 
 
 def index(request):
@@ -21,7 +26,8 @@ def get_clusters(request):
         data = request.data
         directory = data['dir']
         files = data['files']
-        features, segs, metadata = process_files(directory, files)
+        features, segs, metadata = file_utils.process_files(
+            directory, files)
 
         classification_utils = ClassificationUtils()
 
@@ -35,27 +41,36 @@ def get_clusters(request):
         recon, mean_class, std_class = classification_utils.lamda(
             ex_level, it_num, datanorm, mad, gad)
 
-        representive_calls = get_representative_calls(
+        representive_calls = file_utils.get_representative_calls(
             recon, datanorm, metadata)
 
         keys_results = [header['label'] for header in headers_data]
         keys_clusters = [header['label'] for header in headers_clusters]
+        keys_clusters_no_display = [header['label']
+                                    for header in headers_clusters_no_display]
 
         data_results = []
         for i, value in enumerate(metadata):
-            values = [value[0], str(recon[i]), *(value[1:].tolist())]
+            values = [value[0], str(recon[i]), *
+                      (value[1:].tolist()), datanorm[i]]
             zipbObj = zip(keys_results, values)
             data_results.append(dict(zipbObj))
 
         data_clusters = []
         for i, value in enumerate(representive_calls):
-            zipbObj = zip(keys_clusters, value)
+            zipbObj = zip(keys_clusters + keys_clusters_no_display, value)
             data_clusters.append(dict(zipbObj))
 
         response = {
             'results': {
                 'headers': headers_data,
-                'data': data_results
+                'data': data_results,
+                'model': {
+                    'features': datanorm.tolist(),
+                    'min_values': mininums.tolist(),
+                    'max_values': maximums.tolist(),
+                    'metadata': metadata.tolist()
+                }
             },
             'clusters': {
                 'headers': headers_clusters,
@@ -66,53 +81,49 @@ def get_clusters(request):
         return HttpResponse(json.dumps(response, separators=(',', ':')))
 
 
-def get_representative_calls(recon, data, metadata):
-    unique_clusters = np.unique(recon)
-    index_representative = np.zeros((unique_clusters.shape), dtype=int)
-    representive_calls = list()
+@api_view(['GET', 'POST'])
+@parser_classes((JSONParser,))
+def get_segment_in_image(request):
+    if request.method == 'POST':
+        data = request.data
+        spectrogram_utils = SpectrogramUtils()
+        filename = spectrogram_utils.get_segment_in_image(data['dir'],
+                                                          data['filename'], 1, float(data['start']) - 0.5, float(data['end']) + 0.5, float(data['min_freq']) - 200, float(data['max_freq']) + 200)
 
-    for i, cluster in enumerate(unique_clusters):
-        indices = np.where(recon == cluster)[0]
-        calls = data[indices]
-        mean_calls = np.mean(calls, axis=0)[None, :]
-        distances = np.linalg.norm(calls - mean_calls, axis=1)
-        index_representative[i] = np.argmin(distances)
-        meta_representative = metadata[indices[index_representative[i]]]
-        representive_calls.append([str(i), str(len(
-            indices)), *(meta_representative[4:7].tolist()), str(np.around(np.mean(metadata[indices, 3].astype(float)), 2))])
-    return representive_calls
+        response = {
+            'url': filename
+        }
+
+        return HttpResponse(json.dumps(response, separators=(',', ':')))
 
 
-def process_files(directory, files):
-    spectrogram_utils = SpectrogramUtils()
-    feature_utils = FeatureExtractionUtils()
+@api_view(['GET', 'POST'])
+@parser_classes((JSONParser,))
+def save_cluster(request):
+    if request.method == 'POST':
+        data = request.data
 
-    total_features = np.array([])
-    total_segs = np.array([])
-    total_metadata = np.array([])
-    for i, file in enumerate(files):
-        segment_intervals, segs, f, t, s, metadata = spectrogram_utils.extract_complete_data(
-            directory, file, 1)
+        features = np.array(data['model']['features'])
+        min_values = data['model']['min_values']
+        max_values = data['model']['max_values']
+        metadata = np.array(data['model']['metadata'])
 
-        nc = 10
-        nframes = 10
-        nfilters = 30
+        indices = np.array(data['selected'])
 
-        features, features_removed = feature_utils.extract_features(
-            segs, nfilters, nc, nframes)
-        segs = np.delete(np.array(segs), features_removed)[:, None]
-        metadata = np.delete(np.array(metadata), features_removed, axis=0)
-        metadata = np.around(metadata, 2)
-        titles = np.tile(np.array([file]), (metadata.shape[0], 1))
-        metadata = np.hstack((titles, metadata))
+        audio_path, image_path = file_utils.save_representative_call(
+            data['name'], features[indices], metadata[indices])
 
-        if i == 0:
-            total_features = total_features.reshape((0, features.shape[1]))
-            total_segs = total_segs.reshape((0, segs.shape[1]))
-            total_metadata = total_metadata.reshape((0, metadata.shape[1]))
+        model = {
+            'name': data['name'],
+            'mean_values': np.mean(features[indices], axis=0).tolist(),
+            'min_values': min_values,
+            'max_values': max_values,
+            'image_path': image_path,
+            'audio_path': audio_path
+        }
 
-        total_features = np.vstack((total_features, features))
-        total_segs = np.vstack((total_segs, segs))
-        total_metadata = np.vstack((total_metadata, metadata))
+        dir_utils.create_dir('clusters/model/')
+        with open('clusters/model/' + data['name'], 'w') as outfile:
+            json.dump(model, outfile)
 
-    return total_features, total_segs, total_metadata
+        return HttpResponse(json.dumps(model, separators=(',', ':')))

@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
@@ -11,6 +12,7 @@ import CustomPanel from '../components/CustomPanel/CustomPanel';
 import DialogLoader from '../components/DialogLoader/DialogLoader';
 import fileButtons from '../constants/FileButtons.json';
 import speciesButtons from '../constants/SpeciesButtons.json';
+import { changeDir } from '../store/actions';
 import { getData } from '../utils/promises';
 import routes from '../constants/routes.json';
 
@@ -41,6 +43,7 @@ class Home extends Component {
           const filteredFiles = files.filter(
             f => path.extname(f) === '.mp3' || path.extname(f) === '.wav'
           );
+          this.props.changeDir(filePaths[0]);
           this.setState({ dir: filePaths[0], files: filteredFiles });
         });
       }
@@ -170,4 +173,13 @@ class Home extends Component {
   }
 }
 
-export default Home;
+function mapDispatchToProps(dispatch) {
+  return {
+    changeDir: value => dispatch(changeDir(value))
+  };
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Home);

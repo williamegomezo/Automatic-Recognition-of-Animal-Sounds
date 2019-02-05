@@ -25,6 +25,7 @@ class CustomTable extends React.Component {
           }))
         : [],
       data: this.props.data ? this.props.data.map(createData) : [],
+      model: this.props.model,
       page: 0,
       rowsPerPage: 10
     };
@@ -38,7 +39,8 @@ class CustomTable extends React.Component {
       data,
       selected,
       rowsPerPage,
-      page
+      page,
+      model
     } = this.state;
 
     const { checkbox, moduleType } = this.props;
@@ -47,7 +49,7 @@ class CustomTable extends React.Component {
 
     return (
       <Paper className="customTable__container">
-        <CustomToolbar numSelected={selected.length} />
+        <CustomToolbar selected={selected} model={model} />
         <div className="customTable__wrapper">
           <Table className="customTable__table" aria-labelledby="tableTitle">
             <CustomHeader

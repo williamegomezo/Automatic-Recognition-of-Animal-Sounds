@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Fab from '@material-ui/core/Fab';
 import Tabs from '@material-ui/core/Tabs';
@@ -19,12 +18,12 @@ import routes from '../constants/routes.json';
 class TableView extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       value: 0,
       openDialog: false,
       results: props.history.location.state.results,
-      clusters: props.history.location.state.clusters
+      clusters: props.history.location.state.clusters,
+      model: props.history.location.state.results.model
     };
   }
 
@@ -75,6 +74,7 @@ class TableView extends Component {
                   moduleType="results_table"
                   headers={this.state.results.headers}
                   data={this.state.results.data}
+                  model={this.state.model}
                   checkbox
                 />
               </div>

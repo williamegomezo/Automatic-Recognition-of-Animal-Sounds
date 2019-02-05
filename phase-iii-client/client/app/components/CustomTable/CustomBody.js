@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import Checkbox from '@material-ui/core/Checkbox';
 import { changeSelection } from '../../store/actions';
 import { stableSort, getSorting } from './utils';
+import { getData } from '../../utils/promises';
 
 class CustomBody extends React.Component {
   constructor(props) {
@@ -14,8 +15,8 @@ class CustomBody extends React.Component {
   }
 
   componentDidMount() {
-    const { data, moduleType, changeSelection } = this.props;
-    changeSelection({ [moduleType]: data[0] });
+    const { data } = this.props;
+    this.requestImage(data[0]);
   }
 
   isCurrentClicked(id) {
@@ -24,6 +25,31 @@ class CustomBody extends React.Component {
       currentClicked[moduleType] && currentClicked[moduleType]['id'] === id
     );
   }
+
+  requestImage = item => {
+    const { moduleType, dir } = this.props;
+    this.props.changeSelection({ [moduleType]: item });
+    if (item['End [s]'] - item['Start [s]'] <= 5) {
+      getData('get-segment-image', 'POST', {
+        dir,
+        filename: item['Filename'],
+        start: item['Start [s]'],
+        end: item['End [s]'],
+        min_freq: item['Min. Freq. [Hz]'],
+        max_freq: item['Max. Freq. [Hz]']
+      })
+        .then(resp => {
+          item['url'] = resp['url'];
+          this.props.changeSelection({ [moduleType]: item });
+        })
+        .catch(resp => {
+          this.props.changeSelection({ [moduleType]: item });
+        });
+    } else {
+      item['url'] = 'NONE';
+      this.props.changeSelection({ [moduleType]: item });
+    }
+  };
 
   render() {
     const {
@@ -36,8 +62,7 @@ class CustomBody extends React.Component {
       emptyRows,
       headers,
       isSelected,
-      handleClick,
-      moduleType
+      handleClick
     } = this.props;
 
     return (
@@ -51,7 +76,6 @@ class CustomBody extends React.Component {
               <TableRow
                 hover
                 role="checkbox"
-                onClick={() => this.props.changeSelection({ [moduleType]: n })}
                 aria-checked={isSelectedValue}
                 tabIndex={-1}
                 key={n.id}
@@ -67,6 +91,7 @@ class CustomBody extends React.Component {
                 )}
                 {headers.map(h => (
                   <TableCell
+                    onClick={() => this.requestImage(n)}
                     className="customTable__cell"
                     style={{ padding: '4px 10px' }}
                     key={n.id + h.label}
@@ -89,7 +114,10 @@ class CustomBody extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { currentClicked: state.tableReducer.selected };
+  return {
+    currentClicked: state.tableReducer.selected,
+    dir: state.dirReducer.dir
+  };
 };
 
 function mapDispatchToProps(dispatch) {

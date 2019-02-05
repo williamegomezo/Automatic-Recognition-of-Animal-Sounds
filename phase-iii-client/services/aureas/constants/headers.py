@@ -59,3 +59,18 @@ headers_clusters = [
         "type": True
     }
 ]
+
+headers_clusters_no_display = [
+    {
+        "label": "Filename",
+        "type": False
+    },
+    {
+        "label": "End [s]",
+        "type": True
+    },
+    {
+        "label": "Start [s]",
+        "type": True
+    }
+]

@@ -1,2 +1,3 @@
 export const CHANGE_SELECTION = 'CHANGE_SELECTION';
 export const CHANGE_RADIO = 'CHANGE_RADIO';
+export const CHANGE_DIR = 'CHANGE_DIR';
