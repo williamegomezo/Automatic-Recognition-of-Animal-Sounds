@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.decorators import parser_classes
 from rest_framework.parsers import JSONParser
-import json
 import numpy as np
+import json
+import os
 from .utils.spectrogram_utils import SpectrogramUtils
 from .utils.feature_extraction_utils import FeatureExtractionUtils
 from .utils.classification_utils import ClassificationUtils
@@ -15,8 +16,10 @@ file_utils = FileUtils()
 dir_utils = DirUtils()
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the Aureas index.")
+@api_view(['GET'])
+@parser_classes((JSONParser,))
+def get_species_path(request):
+    return HttpResponse(json.dumps({'path': os.path.abspath('clusters')}, separators=(',', ':')))
 
 
 @api_view(['GET', 'POST'])

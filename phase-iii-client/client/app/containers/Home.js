@@ -51,7 +51,12 @@ class Home extends Component {
   };
 
   getSpecies = () => {
-    this.setState({ species: [] });
+    getData('get-species-path', 'GET').then(resp => {
+      fs.readdir(resp.path + '/model', (err, files) => {
+        if (err) throw console.log;
+        this.setState({ species: files });
+      });
+    });
   };
 
   addingSpecies = () => {
