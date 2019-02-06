@@ -27,6 +27,7 @@ class Home extends Component {
       dir: '',
       files: [],
       species: [],
+      selectedSpecies: [],
       addingSpeciesDialog: false
     };
   }
@@ -100,6 +101,17 @@ class Home extends Component {
     }
   };
 
+  selectionChange = (id, checked) => {
+    const { selectedSpecies } = this.state;
+    if (!checked) {
+      this.setState({ selectedSpecies: [...selectedSpecies, id] });
+    } else {
+      this.setState({
+        selectedSpecies: selectedSpecies.filter(value => value !== id)
+      });
+    }
+  };
+
   render() {
     const {
       dir,
@@ -107,7 +119,8 @@ class Home extends Component {
       species,
       addingSpeciesDialog,
       error,
-      errorMsg
+      errorMsg,
+      selectedSpecies
     } = this.state;
     const tree = dir.split('/');
     return (
@@ -116,43 +129,49 @@ class Home extends Component {
         <div className="row col-xs-24 center-xs">
           <div className="col-xs-11">
             <Paper elevation={1}>
-              <h2>Files</h2>
-              <Button variant="contained" onClick={this.selectDirectory}>
-                Select directory
-              </Button>
-              <h3>Directory:</h3>
-              <span> {`...${tree.slice(tree.length - 2).join('/')}`}</span>
-              <CustomPanel
-                info={[
-                  {
-                    label: 'Number of files',
-                    value: files.length
-                  },
-                  {
-                    label: 'Years',
-                    value:
-                      files.length > 0 ? this.uniqueYears(files).join(', ') : 0
-                  },
-                  {
-                    label: 'Months',
-                    value:
-                      files.length > 0 ? this.uniqueMonths(files).join(', ') : 0
-                  },
-                  {
-                    label: 'Days',
-                    value:
-                      files.length > 0 ? this.uniqueDays(files).join(', ') : 0
-                  }
-                ]}
-              />
-              <Divider />
-              <CustomList dir={dir} buttons={fileButtons} items={files} />
+              <div className="list__container">
+                <h2 className="list__title">Files</h2>
+                <Button variant="contained" onClick={this.selectDirectory}>
+                  Select directory
+                </Button>
+                <h3>Directory:</h3>
+                <span> {`...${tree.slice(tree.length - 2).join('/')}`}</span>
+                <CustomPanel
+                  info={[
+                    {
+                      label: 'Number of files',
+                      value: files.length
+                    },
+                    {
+                      label: 'Years',
+                      value:
+                        files.length > 0
+                          ? this.uniqueYears(files).join(', ')
+                          : 0
+                    },
+                    {
+                      label: 'Months',
+                      value:
+                        files.length > 0
+                          ? this.uniqueMonths(files).join(', ')
+                          : 0
+                    },
+                    {
+                      label: 'Days',
+                      value:
+                        files.length > 0 ? this.uniqueDays(files).join(', ') : 0
+                    }
+                  ]}
+                />
+                <Divider />
+                <CustomList dir={dir} buttons={fileButtons} items={files} />
+              </div>
             </Paper>
           </div>
           <div className="col-xs-off-1 col-xs-11 row-xs-24 column">
             <div className="row-xs-16">
-              <Paper elevation={1}>
-                <h2>Species</h2>
+              <Paper className="list__container" elevation={1}>
+                <h2 className="list__title">Species</h2>
                 <CustomList
                   checkbox
                   buttons={speciesButtons}
@@ -164,6 +183,8 @@ class Home extends Component {
                       this.requestClusters();
                     }
                   }}
+                  selectedSpecies={selectedSpecies}
+                  selectionChange={this.selectionChange}
                 />
               </Paper>
             </div>

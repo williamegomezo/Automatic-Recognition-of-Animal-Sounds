@@ -11,36 +11,52 @@ import CustomListItem from './CustomListItem';
 
 class CustomList extends Component {
   constructor(props) {
-    const { items } = props;
+    const { items, selectedSpecies } = props;
     super(props);
     this.state = {
+      selected: [],
       searchValue: '',
-      filteredItems: items
+      filteredItems: items.map((item, id) => ({
+        id,
+        text: item,
+        checked: selectedSpecies ? selectedSpecies.includes(id) : false
+      }))
     };
     this.searchItems = this.searchItems.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { items } = this.props;
+    const { items, selectedSpecies } = this.props;
     if (nextProps.items !== items) {
-      this.setState({ filteredItems: nextProps.items });
+      this.setState({
+        filteredItems: nextProps.items.map((item, id) => ({
+          id,
+          text: item,
+          checked: selectedSpecies ? selectedSpecies.includes(id) : false
+        }))
+      });
     }
   }
 
   searchItems(event) {
     this.setState({ searchValue: event.target.value }, () => {
-      const { items } = this.props;
+      const { selectedSpecies } = this.props;
+      const items = this.props.items.map((item, id) => ({
+        id,
+        text: item,
+        checked: selectedSpecies ? selectedSpecies.includes(id) : false
+      }));
       const { searchValue } = this.state;
       this.setState({
         filteredItems: items
-          ? items.filter(item => item.includes(searchValue))
+          ? items.filter(item => item.text.includes(searchValue))
           : []
       });
     });
   }
 
   render() {
-    const { dir, addButton, buttons, checkbox } = this.props;
+    const { dir, addButton, buttons, checkbox, selectionChange } = this.props;
     const { filteredItems, searchValue } = this.state;
     return (
       <div style={styles.container}>
@@ -64,16 +80,17 @@ class CustomList extends Component {
         </div>
         <List style={styles.list}>
           {filteredItems.length === 0 && (
-            <CustomListItem primary="No results. List empty." />
+            <CustomListItem item={{ text: 'No results. List empty.' }} />
           )}
           {filteredItems.map((item, key) => (
             <CustomListItem
-              id={key}
+              id={item.id}
               key={key}
               dir={dir}
-              primary={item}
+              item={item}
               checkbox={checkbox}
               buttons={buttons}
+              selectionChange={selectionChange}
             />
           ))}
         </List>

@@ -13,7 +13,7 @@ class CustomListItem extends Component {
     this.state = {
       modeDialog: '',
       dialogOpened: false,
-      checked: false,
+      checked: this.props.item.checked,
       audio: null
     };
 
@@ -26,14 +26,9 @@ class CustomListItem extends Component {
     this.closeDialog = this.closeDialog.bind(this);
   }
 
-  toggleCheck() {
-    const { checked } = this.state;
-    this.setState({ checked: !checked });
-  }
-
   playItem() {
-    const { primary, dir } = this.props;
-    this.setState({ audio: new Audio(`${dir}/${primary}`) }, () => {
+    const { item, dir } = this.props;
+    this.setState({ audio: new Audio(`${dir}/${item.text}`) }, () => {
       this.state.audio.play();
     });
   }
@@ -61,8 +56,20 @@ class CustomListItem extends Component {
     this.setState({ dialogOpened: false });
   }
 
+  toggleCheck() {
+    const { checked } = this.state;
+    this.setState({ checked: !checked });
+  }
+
   render() {
-    const { id, primary, checkbox, buttons } = this.props;
+    const {
+      id,
+      item,
+      checkbox,
+      buttons,
+      toogleChange,
+      selectionChange
+    } = this.props;
     const { modeDialog, dialogOpened, checked } = this.state;
     return (
       <ListItem dense button>
@@ -80,9 +87,17 @@ class CustomListItem extends Component {
             ))}
           <div onClick={this.toggleCheck}>
             {checkbox && (
-              <Checkbox checked={checked} tabIndex={-1} disableRipple />
+              <Checkbox
+                checked={checked}
+                tabIndex={-1}
+                onChange={() => {
+                  this.toggleCheck();
+                  selectionChange(id, checked);
+                }}
+                disableRipple
+              />
             )}
-            <span style={styles.text}>{primary}</span>
+            <span style={styles.text}>{item.text}</span>
           </div>
         </div>
         <CustomDialog

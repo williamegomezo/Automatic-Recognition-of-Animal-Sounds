@@ -1,3 +1,9 @@
-.FileList {
-  margin-bottom: 20px;
+.list {
+  &__container {
+    padding: 20px;
+  }
+
+  &__title {
+    padding: 20px;
+  }
 }
