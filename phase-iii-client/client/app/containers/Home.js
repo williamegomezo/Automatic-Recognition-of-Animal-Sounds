@@ -101,6 +101,32 @@ class Home extends Component {
     }
   };
 
+  searchClusters = () => {
+    const { dir, files, species, selectedSpecies } = this.state;
+    if (files.length > 0) {
+      getData('search-clusters', 'POST', {
+        dir,
+        files,
+        species: species.filter((s, id) => selectedSpecies.includes(id))
+      }).then(resp => {
+        this.props.history.push(routes.TABLE, resp);
+      });
+    } else {
+      this.setState(
+        {
+          addingSpeciesDialog: false,
+          error: true,
+          errorMsg: 'No files in left panel'
+        },
+        () => {
+          setTimeout(() => {
+            this.setState({ error: false, errorMsg: '' });
+          }, 2000);
+        }
+      );
+    }
+  };
+
   selectionChange = (id, checked) => {
     const { selectedSpecies } = this.state;
     if (!checked) {
@@ -190,7 +216,7 @@ class Home extends Component {
             </div>
             <div className="row-xs-2" />
             <div className="row-xs-2">
-              <Button variant="contained" onClick={this.selectDirectory}>
+              <Button variant="contained" onClick={this.searchClusters}>
                 SEARCH
               </Button>
             </div>

@@ -126,6 +126,7 @@ def save_cluster(request):
             'name': data['name'],
             'metadata': metadata_representative.tolist(),
             'mean_values': np.mean(features[indices], axis=0).tolist(),
+            'std_values': np.std(features[indices], axis=0).tolist(),
             'min_values': min_values,
             'max_values': max_values,
             'image_path': image_path,
@@ -137,3 +138,89 @@ def save_cluster(request):
             json.dump(model, outfile)
 
         return HttpResponse(json.dumps(model, separators=(',', ':')))
+
+
+@api_view(['GET', 'POST'])
+@parser_classes((JSONParser,))
+def search_clusters(request):
+    if request.method == 'POST':
+        data = request.data
+        directory = data['dir']
+        files = data['files']
+        species = data['species']
+        features, segs, metadata = file_utils.process_files(
+            directory, files)
+
+        classification_utils = ClassificationUtils()
+
+        ex_level = 1
+        it_num = 5
+        data = np.hstack((features, metadata[:, 6].astype(float)[:, None]))
+        mad = 'binomial'
+        gad = '3pi'
+
+        num_datos, num_feat = data.shape
+        mean_class = 0.5 * np.ones((1, num_feat))
+        std_class = 0.25 * np.ones((1, num_feat))
+        min_values = np.empty((0, num_feat))
+        max_values = np.empty((0, num_feat))
+        for specie in species:
+            with open('clusters/model/' + specie, 'r') as infile:
+                model = json.load(infile)
+                mean_class = np.vstack(
+                    (mean_class, np.array(model['mean_values'])))
+                std_class = np.vstack(
+                    (std_class, np.array(model['std_values'])))
+                min_values = np.vstack(
+                    (min_values, np.array(model['min_values'])))
+                max_values = np.vstack(
+                    (max_values, np.array(model['max_values'])))
+
+        general_min_values = np.min(min_values, axis=0)
+        general_max_values = np.max(max_values, axis=0)
+
+        datanorm, mininums, maximums = classification_utils.norm(
+            data, general_min_values, general_max_values)
+        recon = classification_utils.predict_lamda(
+            ex_level, datanorm, mad, gad, mean_class, std_class)
+
+        representive_calls = file_utils.get_representative_calls(
+            recon, datanorm, metadata)
+
+        keys_results = [header['label'] for header in headers_data]
+        keys_clusters = [header['label'] for header in headers_clusters]
+        keys_clusters_no_display = [header['label']
+                                    for header in headers_clusters_no_display]
+
+        data_results = []
+        for i, value in enumerate(metadata):
+            species_name = species[recon[i] - 1] if recon[i] > 0 else 'NIC'
+            values = [value[0], species_name, *
+                      (value[1:].tolist()), datanorm[i]]
+            zipbObj = zip(keys_results, values)
+            data_results.append(dict(zipbObj))
+
+        data_clusters = []
+        for i, value in enumerate(representive_calls):
+            value[0] = species[i - 1] if i > 0 else 'NIC'
+            zipbObj = zip(keys_clusters + keys_clusters_no_display, value)
+            data_clusters.append(dict(zipbObj))
+
+        response = {
+            'results': {
+                'headers': headers_data,
+                'data': data_results,
+                'model': {
+                    'features': datanorm.tolist(),
+                    'min_values': mininums.tolist(),
+                    'max_values': maximums.tolist(),
+                    'metadata': metadata.tolist()
+                }
+            },
+            'clusters': {
+                'headers': headers_clusters,
+                'data': data_clusters
+            }
+        }
+
+        return HttpResponse(json.dumps(response, separators=(',', ':')))

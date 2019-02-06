@@ -92,9 +92,9 @@ class ClassificationUtils:
         c = (a+b)*(n-1)
         return c**(1/2)
 
-    def norm(self, data):
-        minimums = np.min(data, axis=0)
-        maximums = np.max(data, axis=0)
+    def norm(self, data, min_values=[], max_values=[]):
+        minimums = min_values if len(min_values) != 0 else np.min(data, axis=0)
+        maximums = max_values if len(max_values) != 0 else np.max(data, axis=0)
         data_norm = (data - minimums)/(maximums - minimums)
 
         return data_norm, minimums, maximums
