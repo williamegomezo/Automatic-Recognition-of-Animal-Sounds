@@ -57,8 +57,8 @@ class Home extends Component {
     getData('get-species', 'GET').then(resp => {
       const formatedSpecies = resp.map(specie => ({
         'Species Name': specie['name'],
-        'Start. [s]': specie['metadata'][1],
-        'End. [s]': specie['metadata'][2],
+        'Start [s]': specie['metadata'][1],
+        'End [s]': specie['metadata'][2],
         'Min. Freq. [Hz]': specie['metadata'][4],
         'Max. Freq. [Hz]': specie['metadata'][5],
         'Dom. Freq. [Hz]': specie['metadata'][6],

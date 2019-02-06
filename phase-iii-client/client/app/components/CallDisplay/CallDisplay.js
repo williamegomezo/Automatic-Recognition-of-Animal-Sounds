@@ -9,11 +9,14 @@ import buttons from '../../constants/CallDisplayButtons';
 
 class CallDisplay extends Component {
   playItem = () => {
-    const { selectedItem, moduleType } = this.props;
-    const audioPath = selectedItem[moduleType]['audio path'];
+    const { selectedItem, moduleType, dirPath } = this.props;
+    let audioPath = dirPath + '/' + selectedItem[moduleType]['Filename'];
+    if (moduleType === 'list_initial') {
+      audioPath = selectedItem[moduleType]['audio path'];
+    }
     const audio = new Audio(audioPath);
-    const start = Number(selectedItem[moduleType]['Start. [s]']) - 0.2;
-    const stop = Number(selectedItem[moduleType]['End. [s]']) + 0.2;
+    const start = Number(selectedItem[moduleType]['Start [s]']) - 0.2;
+    const stop = Number(selectedItem[moduleType]['End [s]']) + 0.2;
     audio.currentTime = start;
     audio.play();
     setTimeout(() => audio.pause(), (stop - start) * 1000);
@@ -21,7 +24,6 @@ class CallDisplay extends Component {
 
   render() {
     const { moduleType, headers, selectedItem } = this.props;
-
     let imageUrl =
       selectedItem[moduleType] && selectedItem[moduleType]['url']
         ? selectedItem[moduleType]['url'] + '.png'
@@ -31,7 +33,7 @@ class CallDisplay extends Component {
     }
     return (
       <Paper className="col-xs-off-1 col-xs-22 callDisplay__container">
-        {selectedItem[moduleType]['image path'] ||
+        {(selectedItem[moduleType] && selectedItem[moduleType]['image path']) ||
         (selectedItem[moduleType] &&
           selectedItem[moduleType]['url'] &&
           imageUrl !== 'NONE.png') ? (
@@ -73,7 +75,10 @@ class CallDisplay extends Component {
 }
 
 const mapStateToProps = state => {
-  return { selectedItem: state.tableReducer.selected };
+  return {
+    selectedItem: state.tableReducer.selected,
+    dirPath: state.dirReducer.dir
+  };
 };
 
 export default connect(mapStateToProps)(CallDisplay);
